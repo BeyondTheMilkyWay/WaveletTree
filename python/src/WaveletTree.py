@@ -5,9 +5,41 @@ class WaveletTree:
     def __init__(self):
         self.root_node = None
 
+    """ Constracting WaveletTree based on 'data' and 'alphabet' """
     def build(self, alphabet, data):
         self.root_node = WaveletNode(alphabet)
         self.__build(self.root_node, alphabet, data)
+
+    """ Counts number of times 'character' appears in string up to 'position' """
+    def rank(self, position, character):
+        self.check_position(position)
+        self.check_character(character)
+
+        # TODO it will not count character at given 'position'. Does it need to count it?
+        return WaveletTree.__rank(self.root_node, position, character)
+
+    """ Returns character at 'index' position in string """
+    def access(self, index):
+        self.check_position(index)
+
+        return WaveletTree.__access(self.root_node, index)
+
+    """ Returns position in string where 'character' occurs for the 'nth_occurrence' time """
+    def select(self, nth_occurrence, character):
+        self.check_character(character)
+    #
+    #     return WaveletTree.__select(self.root_node, nth_occurrence, character)
+
+    def log(self):
+        WaveletTree.__log(self.root_node)
+
+    def check_position(self, position):
+        if position > len(self.root_node.bit_vector):
+            raise ValueError('Position is greater than bit_vector')
+
+    def check_character(self, character):
+        if character not in self.root_node.alphabet:
+            raise ValueError('Character is not in alphabet')
 
     # Internal recursive method that builds tree
     @staticmethod
@@ -40,8 +72,37 @@ class WaveletTree:
         node.right = WaveletNode(right_sub_alphabet)
         WaveletTree.__build(node.right, right_sub_alphabet, right_sub_data)
 
-    def log(self):
-        WaveletTree.__log(self.root_node)
+    @staticmethod
+    def __rank(node, position, character):
+        if len(node.alphabet) == 1:
+            return position
+
+        is_left = character in node.left.alphabet
+
+        child = node.left if is_left else node.right
+        bit_to_count = '0' if is_left else '1'
+
+        new_position = 0
+        for c in node.bit_vector[:position]:                # TODO can this be replaced with reduce()?
+            new_position += 1 if c == bit_to_count else 0
+
+        return WaveletTree.__rank(child, new_position, character)
+
+    @staticmethod
+    def __access(node, index):
+        if len(node.alphabet) == 1:
+            return node.alphabet[0]
+
+        is_left = node.bit_vector[index] == '0'
+        child = node.left if is_left else node.right
+        bit_to_count = '0' if is_left else '1'
+
+        new_index = 0
+        for c in node.bit_vector[:index]:                # TODO can this be replaced with reduce()?
+            new_index += 1 if c == bit_to_count else 0
+
+        return WaveletTree.__access(child, new_index)
+
 
     @staticmethod
     def __log(node):
