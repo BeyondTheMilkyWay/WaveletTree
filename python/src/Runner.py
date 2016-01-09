@@ -13,7 +13,4 @@ if __name__ == '__main__':
     tree = WaveletTree()
     tree.build(alphabet, fasta_file.data)
 
-    print 'rank(5, e)', tree.rank(5, 'e')
-    print 'access(0)', tree.access(0)
-
     print 'Done'
