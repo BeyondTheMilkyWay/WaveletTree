@@ -1,5 +1,5 @@
 /**
- * Wavelet tree node implementation.
+ * Implementation of wavelet tree node.
  * 
  * @author ICapalija
  * 
