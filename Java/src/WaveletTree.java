@@ -50,7 +50,7 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Build tree recursively.
+	 * Build tree.
 	 * 
 	 * @param node
 	 *            current node.
@@ -102,7 +102,8 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Calculates rank of prefix. Rank is number of occurrences of given letter
+	 * Rank method. 
+	 * Rank is number of occurrences of given letter
 	 * in prefix S[0..index].
 	 * 
 	 * @param letter
@@ -116,7 +117,8 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Recursive method that calculates rank of letter in prefix.
+	 * Recursive method that calculates rank. Rank is number of 
+	 * occurrences of given letter in prefix S[0..index].
 	 * 
 	 * @param node
 	 *            current node.
@@ -153,8 +155,9 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Calculates smallest prefix with <code>occurrenceNum + 1</code>
-	 * occurrences of given letter.
+	 * Select method.
+	 * Result of a select method is smallest prefix with 
+	 * <code>occurrenceNum + 1</code> occurrences of given letter.
 	 * 
 	 * @param letter
 	 *            letter.
@@ -187,8 +190,7 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Recursive calculation of prefix with <code>occurrenceNum + 1</code>
-	 * occurrences of given letter.
+	 * Recursive calculation of select method.
 	 * 
 	 * @param node
 	 *            current node.
@@ -221,6 +223,7 @@ public class WaveletTree {
 	}
 
 	/**
+	 * Access method.
 	 * Get character on given index in sequence.
 	 * 
 	 * @param index
