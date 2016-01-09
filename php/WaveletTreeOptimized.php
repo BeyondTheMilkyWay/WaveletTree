@@ -1,11 +1,17 @@
 <?php
 
 class WaveletTree {
+
+    private $string;
+
 	/** Node $root */
 	private $root;
+    /** array $alphabet  */
+    private $alphabet;
 
 	public function __construct($string) {
-		$this->root = $this->createNode($string);
+        $this->string = $string;
+		list($this->root, $this->alphabet) = $this->createNode($string);
 		$this->createChildNodes($this->root, $string);
 	}
 
@@ -21,12 +27,12 @@ class WaveletTree {
 			}
 		}
 
-		$leftNode = $this->createNode($left);
+		$leftNode = $this->createNode($left)[0];
 		$parent->setLeftChild($leftNode);
 		if(!$leftNode->isLeaf()) {
 			$this->createChildNodes($leftNode, $left);
 		}
-		$rightNode = $this->createNode($right);
+		$rightNode = $this->createNode($right)[0];
 		$parent->setRightChild($rightNode);	
 		if(!$rightNode->isLeaf()) {
 			$this->createChildNodes($rightNode, $right);
@@ -59,7 +65,7 @@ class WaveletTree {
 		  	$result[$i] = $dictionary[$string[$i]];
 		}
 		//translate dictionary to node strings
-		return new Node($result, $isLeaf);
+		return [new Node($result, $isLeaf, $dictionary), $dictionary];
 	}
 
 	/**
@@ -86,9 +92,53 @@ class WaveletTree {
 		}
 		return $dictionary;
 	}
+
 	public function getRoot() {
 		return $this->root;
 	}
+
+    public function rank($index, $letter) {
+        if(!isset($this->alphabet[$letter])) {
+            return 0;
+        }
+        if($index > mb_strlen($this->string)) {
+            return 0;
+        }
+
+        return $this->rankRecursive($this->root, $index+1, $letter, $this->alphabet);
+    }
+
+    /**
+     * @param $node Node
+     * @param $index
+     * @param $letter
+     *
+     * @param $alphabet
+     *
+     * @return mixed
+     */
+    private function rankRecursive($node, $index, $letter, $alphabet) {
+        $letterCoded = $alphabet[$letter];
+
+        //check letter coding
+        if($letterCoded == 1) {
+            $trueCount = $node->countOccurrence(1, $index);
+
+            if ($node->isLeaf() || $node->getRightChild() == null) {// if node is leaf
+                return $trueCount;
+            } else {// if node is not leaf
+                return $this->rankRecursive($node->getRightChild(), $trueCount, $letter, $node->getRightChild()->getDictionary());
+            }
+        }else {
+            $falseCount = $node->countOccurrence(0, $index);
+
+            if ($node->isLeaf() || $node->getLeftChild() == null ) {// if node is leaf
+                return $falseCount;
+            } else {// if node is not leaf
+                return $this->rankRecursive($node->getLeftChild(), $falseCount, $letter,  $node->getLeftChild()->getDictionary());
+            }
+        }
+    }
 }
 
 class Node {
@@ -96,15 +146,15 @@ class Node {
 	private $isLeaf;
 	/** Node[] $children */
 	private $children;
+    /** @var  array */
+    private $dictionary;
 
-	public function __construct($binary, $isLeaf) {
+	public function __construct($binary, $isLeaf, $dictionary) {
 		$this->binary = $binary; 
-		$this->isLeaf = $isLeaf; 
+		$this->isLeaf = $isLeaf;
+        $this->dictionary = $dictionary;
 	}
 
-	public function getString() {
-		return $this->string;
-	}
 	public function getBinary() {
 		return $this->binary;
 	}
@@ -114,15 +164,39 @@ class Node {
 	public function setRightChild($child) {
 		$this->children['right'] = $child;
 	}
-	public function getLeftChild($child) {
-		return $this->children['left'];
+
+    /**
+     * @return Node
+     */
+	public function getLeftChild() {
+		return isset($this->children['left']) ? $this->children['left'] : null;
 	}
-	public function getRightChild($child) {
-		return $this->children['right'];
+
+    /**
+     * @return Node
+     */
+	public function getRightChild() {
+		return isset($this->children['right']) ? $this->children['right'] : null;
 	}
 	public function isLeaf() {
 		return $this->isLeaf;
 	}
+    public function getDictionary() {
+        return $this->dictionary;
+    }
+
+    public function countOccurrence($bit, $index) {
+        $counter = 0;
+        for($i=0; $i< count($this->binary); $i++) {
+            if($i >= $index) {
+                break;
+            }
+            if($this->binary[$i] == $bit) {
+                $counter++;
+            }
+        }
+        return $counter;
+    }
 }
 
 //get memory usage 
@@ -148,4 +222,6 @@ elseif ($totalMemoryUsage < 1048576)
 else 
     print round($totalMemoryUsage/1048576,2)." MB\n";
 
+
+print "Rank (5,e) :" . $vaveletTree->rank(5,'e');
 ?>
