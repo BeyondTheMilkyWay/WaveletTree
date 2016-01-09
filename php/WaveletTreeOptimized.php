@@ -109,6 +109,16 @@ class WaveletTree {
     }
 
     /**
+     * @param $index
+     *
+     * @return string
+     */
+	public function access($index) {
+        //TODO: check if index starts from zero or?
+        return $this->accessRecursive($this->root, $index, $this->alphabet);
+    }
+
+    /**
      * @param $node Node
      * @param $index
      * @param $letter
@@ -136,6 +146,31 @@ class WaveletTree {
                 return $falseCount;
             } else {// if node is not leaf
                 return $this->rankRecursive($node->getLeftChild(), $falseCount, $letter,  $node->getLeftChild()->getDictionary());
+            }
+        }
+    }
+
+    /**
+     * @param $node Node
+     * @param $index
+     * @param $alphabet
+     *
+     * @return string
+     */
+    private function accessRecursive($node, $index, $alphabet) {
+        if($node->getBinary()[$index] == 1) {
+            if($node->isLeaf() || $node->getRightChild() == null) {
+                return array_search(1,$node->getDictionary()); //get where coded as 1
+            }else {
+                $trueCount = $node->countOccurrence(1, $index);
+				return $this->accessRecursive($node->getRightChild(), $trueCount, $alphabet);
+            }
+        }else{
+            if($node->isLeaf() || $node->getLeftChild() == null) {
+                return array_search(0,$node->getDictionary()); //get where coded as 1
+            }else {
+                $falseCount = $node->countOccurrence(0, $index);
+                return $this->accessRecursive($node->getLeftChild(), $falseCount, $alphabet);
             }
         }
     }
@@ -223,5 +258,7 @@ else
     print round($totalMemoryUsage/1048576,2)." MB\n";
 
 
-print "Rank (5,e) :" . $vaveletTree->rank(5,'e');
+print "Rank (5,e) :" . $vaveletTree->rank(5,'e') . "\n";
+print "Access (1) :" . $vaveletTree->access(1) . "\n";
+
 ?>
