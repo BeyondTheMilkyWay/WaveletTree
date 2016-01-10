@@ -89,11 +89,33 @@ int getOccurrenceCount(struct BitVector *bit_vector, int max_position, bool valu
     }
 
     int counter = 0;
-    for (int i=0; i< max_position; ++i) {
+    for (int i = 0; i < max_position; ++i) {
         if (bitVecGetOnPosition(bit_vector, i) == value) {
             ++counter;
         }
     }
 
     return counter;
+}
+
+int calcNthOccurrence(struct BitVector *bit_vector, int nth_occurrence, bool value) {
+    int counter = 0;
+    int index = -1;
+
+    for (int i = 0; i < bit_vector->size; ++i) {
+        if (bitVecGetOnPosition(bit_vector, i) == value) {
+            ++counter;
+            index = i;
+        }
+
+        if (counter == nth_occurrence) {
+            break;
+        }
+    }
+
+    if (counter != nth_occurrence) {
+        index = -1;
+    }
+
+    return index;
 }

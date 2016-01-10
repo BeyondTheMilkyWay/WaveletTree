@@ -14,6 +14,10 @@ void testTreeBuilding();
 
 void testRanking();
 
+void testAccessing();
+
+void testSelecting();
+
 void testAll();
 
 #endif //C_TESTER_H

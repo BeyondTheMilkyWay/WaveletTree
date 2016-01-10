@@ -77,18 +77,22 @@ struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
     if (right - left == 1) {
         node->left_child = allocateWaveletNode();
         node->left_child->letter = complete_alphabet[left];
+        node->left_child->parent = node;
 
         node->right_child = allocateWaveletNode();
         node->right_child->letter = complete_alphabet[right];
+        node->right_child->parent = node;
     } else {
         int half = (right - left) / 2;
         int middle = left + half;
 
         char *extracted_left = extractLettersByEncoding(node->bit_vector, node_chars, FALSE);
         node->left_child = addNode(complete_alphabet, extracted_left, left, middle);
+        node->left_child->parent = node;
 
         char *extracted_right = extractLettersByEncoding(node->bit_vector, node_chars, TRUE);
         node->right_child = addNode(complete_alphabet, extracted_right, middle, right);
+        node->right_child->parent = node;
 
         free((void *) extracted_left);
         free((void *) extracted_right);
@@ -100,6 +104,7 @@ struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
 struct WaveletTree *buildTree(char *input_str, char *complete_alphabet) {
     struct WaveletTree *tree = (struct WaveletTree *) malloc(sizeof(struct WaveletTree));
     tree->root = addNode(complete_alphabet, input_str, 0, (int) (strlen(complete_alphabet) - 1));
+    tree->root->parent = NULL;
 
     return tree;
 }
@@ -123,8 +128,8 @@ int rankRec(struct WaveletNode *node, char *complete_alphabet,
     }
 }
 
-int rank(struct WaveletTree *tree, char *complete_alphabet,
-         int position, char letter) {
+int rankOp(struct WaveletTree *tree, char *complete_alphabet,
+           int position, char letter) {
     struct WaveletNode *root = tree->root;
     return rankRec(root, complete_alphabet, letter, position + 1);
 }
@@ -149,7 +154,39 @@ char accessRec(struct WaveletNode *node, char *complete_alphabet, int position) 
     }
 }
 
-char access(struct WaveletTree *tree, char *complete_alphabet, int position) {
+char accessOp(struct WaveletTree *tree, char *complete_alphabet, int position) {
     struct WaveletNode *root = tree->root;
     return accessRec(root, complete_alphabet, position);
+}
+
+int selectRec(struct WaveletNode *node, char *complete_alphabet,
+              char letter, int nth_occurrence) {
+    bool encoding = getEncodingType(complete_alphabet, letter, node->alphabet_start, node->alphabet_end);
+    int position = calcNthOccurrence(node->bit_vector, nth_occurrence, encoding);
+
+    if (node->parent == NULL) {
+        return position;
+    } else {
+        return selectRec(node->parent, complete_alphabet, letter, position + 1);
+    }
+}
+
+int selectOp(struct WaveletTree *tree, char *complete_alphabet, char letter, int nth_occurrence) {
+    struct WaveletNode *node = tree->root;
+
+    // find leaf node containing 'letter'
+    int index = binarySearchGetIndex(complete_alphabet, letter);
+
+    // bottom-up procedure: find starting node
+    while (!isLeafNode(node)) {
+        bool encoding = getEncodingType(complete_alphabet, letter, node->alphabet_start, node->alphabet_end);
+
+        if (encoding == FALSE) {
+            node = node->left_child;
+        } else {
+            node = node->right_child;
+        }
+    }
+
+    return selectRec(node->parent, complete_alphabet, letter, nth_occurrence);
 }

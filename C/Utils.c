@@ -123,3 +123,21 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
 
     *alphabet = extractAlphabetLetters(all_lines);
 }
+
+int binarySearchGetIndex(char *data, char letter) {
+    int low = 0;
+    int high = (int) (strlen(data) - 1);
+
+    while (low <= high) {
+        int middle = low + (high - low) / 2; //avoids overflow
+        if (letter < data[middle]) {
+            high = middle - 1;
+        } else if (letter > data[middle]) {
+            low = middle + 1;
+        } else {
+            return middle;
+        }
+    }
+
+    return -1;
+}

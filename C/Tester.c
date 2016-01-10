@@ -91,16 +91,16 @@ void testRanking() {
     char *used_alphabet = extractAlphabetLetters(test);
     struct WaveletTree *tree = buildTree(test, used_alphabet);
 
-    assert(rank(tree,used_alphabet, 5, 'e') == 2);
-    assert(rank(tree,used_alphabet, 0, '$') == 0);
-    assert(rank(tree,used_alphabet, 15, '$') == 0);
-    assert(rank(tree,used_alphabet, 43, '$') == 0);
-    assert(rank(tree,used_alphabet, 44, '$') == 1);
-    assert(rank(tree,used_alphabet, 28, 'P') == 2);
-    assert(rank(tree,used_alphabet, 33, 'P') == 2);
-    assert(rank(tree,used_alphabet, 44, 'P') == 2);
-    assert(rank(tree,used_alphabet, 38, 'p') == 5);
-    assert(rank(tree,used_alphabet, 44, 't') == 1);
+    assert(rankOp(tree, used_alphabet, 5, 'e') == 2);
+    assert(rankOp(tree, used_alphabet, 0, '$') == 0);
+    assert(rankOp(tree, used_alphabet, 15, '$') == 0);
+    assert(rankOp(tree, used_alphabet, 43, '$') == 0);
+    assert(rankOp(tree, used_alphabet, 44, '$') == 1);
+    assert(rankOp(tree, used_alphabet, 28, 'P') == 2);
+    assert(rankOp(tree, used_alphabet, 33, 'P') == 2);
+    assert(rankOp(tree, used_alphabet, 44, 'P') == 2);
+    assert(rankOp(tree, used_alphabet, 38, 'p') == 5);
+    assert(rankOp(tree, used_alphabet, 44, 't') == 1);
 
     print("Ranking tests [PASSED]");
 
@@ -116,14 +116,35 @@ void testAccessing() {
     char *used_alphabet = extractAlphabetLetters(test);
     struct WaveletTree *tree = buildTree(test, used_alphabet);
 
-    assert(access(tree, used_alphabet, 0) == 'P');
-    assert(access(tree, used_alphabet, 9) == 'e');
-    assert(access(tree, used_alphabet, 18) == '_');
-    assert(access(tree, used_alphabet, 19) == 'a');
-    assert(access(tree, used_alphabet, 42) == 'r');
-    assert(access(tree, used_alphabet, 44) == '$');
+    assert(accessOp(tree, used_alphabet, 0) == 'P');
+    assert(accessOp(tree, used_alphabet, 9) == 'e');
+    assert(accessOp(tree, used_alphabet, 18) == '_');
+    assert(accessOp(tree, used_alphabet, 19) == 'a');
+    assert(accessOp(tree, used_alphabet, 42) == 'r');
+    assert(accessOp(tree, used_alphabet, 44) == '$');
 
     print("Accessing tests [PASSED]");
+
+    free((void *) test);
+    deleteTree(tree);
+}
+
+void testSelecting() {
+    char tmp[] = "Peter_Piper_picked_a_peck_of_pickled_peppers$";
+    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    strcpy(test, tmp);
+
+    char *used_alphabet = extractAlphabetLetters(test);
+    struct WaveletTree *tree = buildTree(test, used_alphabet);
+
+    assert(selectOp(tree, used_alphabet, '$', 0) == -1);
+    assert(selectOp(tree, used_alphabet, '$', 1) == 44);
+    assert(selectOp(tree, used_alphabet, '$', 2) == -1);
+    assert(selectOp(tree, used_alphabet, 'l', 1) == 33);
+    assert(selectOp(tree, used_alphabet, 'o', 6) == -1);
+    assert(selectOp(tree, used_alphabet, 'p', 2) == 12);
+
+    print("Selection tests [PASSED]");
 
     free((void *) test);
     deleteTree(tree);
@@ -135,4 +156,5 @@ void testAll() {
     testTreeBuilding();
     testRanking();
     testAccessing();
+    testSelecting();
 }

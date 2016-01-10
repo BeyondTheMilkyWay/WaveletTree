@@ -30,4 +30,6 @@ char *getBitVectorAsString(struct BitVector *bit_vector);
 
 int getOccurrenceCount(struct BitVector *bit_vector, int max_position, bool value);
 
+int calcNthOccurrence(struct BitVector *bit_vector, int nth_occurrence, bool value);
+
 #endif //C_BITVECTOR_H

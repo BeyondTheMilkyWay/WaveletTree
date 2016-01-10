@@ -21,4 +21,6 @@ char *extractAlphabetLetters(char *input_chars);
 
 void getAlphabetFromFile(const char *file_name, char **alphabet, char **input);
 
+int binarySearchGetIndex(char *data, char letter);
+
 #endif //C_UTILS_H
