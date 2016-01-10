@@ -6,7 +6,6 @@
 #define C_BITVECTOR_H
 
 #include "Basic.h"
-#include <sys/types.h>
 #include <stdio.h>
 
 struct BitVector {
@@ -15,9 +14,17 @@ struct BitVector {
 };
 
 struct BitVector *allocateBitVector(size_t num_of_chars);
+
 void bitVecSetOnPosition(struct BitVector *bit_vector, int index, bool value);
+
 bool bitVecGetOnPosition(struct BitVector *bit_vector, int index);
+
 char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, bool value);
+
 void freeBitVector(struct BitVector *bit_vector);
+
+void printBitVector(struct BitVector *bit_vector);
+
+char *getBitVectorAsString(struct BitVector *bit_vector);
 
 #endif //C_BITVECTOR_H

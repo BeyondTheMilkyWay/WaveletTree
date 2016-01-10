@@ -5,7 +5,6 @@
 #ifndef C_WAVELET_TREE_H
 #define C_WAVELET_TREE_H
 
-#include <sys/types.h>
 #include "BitVector.h"
 #include "Basic.h"
 

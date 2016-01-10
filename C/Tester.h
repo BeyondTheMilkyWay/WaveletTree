@@ -10,6 +10,8 @@
 
 void testBitVector();
 
+void testTreeBuilding();
+
 void testAll();
 
 #endif //C_TESTER_H

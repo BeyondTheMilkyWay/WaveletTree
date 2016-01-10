@@ -44,7 +44,7 @@ char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, b
         }
     }
 
-    char *selected = (char *) malloc(num_of_selected * sizeof(char));
+    char *selected = (char *) malloc((num_of_selected + 1) * sizeof(char));
     int index = 0;
     for (int i = 0; i < bit_vector->size; i++) {
         if (bitVecGetOnPosition(bit_vector, i) == value) {
@@ -53,10 +53,32 @@ char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, b
         }
     }
 
+    selected[num_of_selected] = '\0';
+
     return selected;
+}
+
+void printBitVector(struct BitVector *bit_vector) {
+    int size = bit_vector->size;
+    for (int i = 0; i < size; ++i) {
+        printf("%d", bitVecGetOnPosition(bit_vector, i));
+    }
+    printf("\n");
 }
 
 void freeBitVector(struct BitVector *bit_vector) {
     free((void *) bit_vector->bits);
     free((void *) bit_vector);
+}
+
+char *getBitVectorAsString(struct BitVector *bit_vector) {
+    char *str = (char *) malloc((bit_vector->size + 1) * sizeof(char));
+
+    for (int i = 0; i < bit_vector->size; ++i) {
+        str[i] = (char) ((bitVecGetOnPosition(bit_vector, i) == TRUE) ? '1' : '0');
+    }
+
+    str[bit_vector->size] = '\0';
+
+    return str;
 }

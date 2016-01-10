@@ -9,6 +9,35 @@ void error(const char *msg) {
     exit(-1);
 }
 
+bool compareStrings(char *str1, char *str2) {
+    int len1 = (int) strlen(str1);
+    int len2 = (int) strlen(str2);
+
+    if (len1 != len2) {
+        return FALSE;
+    }
+
+    for (int i = 0; i < len1; ++i) {
+        if (str1[i] != str2[i]) {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+char *replaceSpaces(char *data) {
+    int len = (int) strlen(data);
+
+    for (int i = 0; i < len; ++i) {
+        if (data[i] == ' ') {
+            data[i] = '_';
+        }
+    }
+
+    return data;
+}
+
 bool startsWith(const char *pre, const char *str) {
     return strncmp(pre, str, strlen(pre)) == 0;
 }
@@ -76,15 +105,20 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
         }
 
         real_len += strlen(line);
+        replaceSpaces(line);
         strcat(all_lines, line);
     }
 
     fclose(file);
 
-    *input = (char *) malloc(real_len * sizeof(char));
-    strcpy(*input, all_lines);
-
     // do reallocation to skip all new_lines
+//    all_lines = realloc(all_lines, (real_len + 1) * sizeof(char));
+//    all_lines[real_len] = '$';
+
     all_lines = realloc(all_lines, real_len * sizeof(char));
+//    all_lines[real_len] = '$';
+
+    *input = all_lines;
+
     *alphabet = extractAlphabetLetters(all_lines);
 }

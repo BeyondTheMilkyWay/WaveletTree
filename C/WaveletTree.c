@@ -81,7 +81,7 @@ struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
 
 struct WaveletTree *buildTree(char *input_str, char *complete_alphabet) {
     struct WaveletTree *tree = (struct WaveletTree *) malloc(sizeof(struct WaveletTree));
-    tree->root = addNode(complete_alphabet, input_str, 0, (int) (strlen(input_str) - 1));
+    tree->root = addNode(complete_alphabet, input_str, 0, (int) (strlen(complete_alphabet) - 1));
 
     return tree;
 }

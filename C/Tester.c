@@ -12,7 +12,7 @@ void print(char *msg) {
 }
 
 void testBitVector() {
-    char testString[6] = "dthklh";
+    char testString[7] = "dthklh";
     char *alphabet = extractAlphabetLetters(testString);
 
     assert(alphabet[0] == 'd');
@@ -39,6 +39,46 @@ void testBitVector() {
     print("BitVector tests [PASSED]");
 }
 
+void testTreeBuilding() {
+    char tmp[] = "ahcbedghcfaehcgd";
+    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    strcpy(test, tmp);
+
+    char *used_alphabet = extractAlphabetLetters(test);
+    struct WaveletTree *tree = buildTree(test, used_alphabet);
+
+    assert(compareStrings(getBitVectorAsString(tree->root->bit_vector), "0100101101011010") == TRUE);
+
+    struct WaveletNode *left_node = tree->root->left_child;
+    assert(compareStrings(getBitVectorAsString(left_node->bit_vector), "01011011") == TRUE);
+
+    struct WaveletNode *right_node = tree->root->right_child;
+    assert(compareStrings(getBitVectorAsString(right_node->bit_vector), "10110011") == TRUE);
+
+    print("TreeBuild tests [PASSED]");
+}
+
+void testReplace() {
+    char *test = (char *) malloc(7 * sizeof(char));
+    test[0] = 'a';
+    test[1] = 'b';
+    test[2] = ' ';
+    test[3] = ' ';
+    test[4] = 'd';
+    test[5] = ' ';
+    test[6] = '\0';
+
+    replaceSpaces(test);
+
+    assert(test[2] == '_');
+    assert(test[3] == '_');
+    assert(test[5] == '_');
+
+    print("ReplaceSpaces tests [PASSED]");
+}
+
 void testAll() {
+    testReplace();
     testBitVector();
+    testTreeBuilding();
 }

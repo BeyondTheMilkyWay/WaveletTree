@@ -9,6 +9,10 @@
 
 void error(const char *msg);
 
+char *replaceSpaces(char *data);
+
+bool compareStrings(char *str1, char *str2);
+
 bool startsWith(const char *pre, const char *str);
 
 int compare(const void *a, const void *b);
