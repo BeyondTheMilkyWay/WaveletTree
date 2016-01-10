@@ -128,3 +128,28 @@ int rank(struct WaveletTree *tree, char *complete_alphabet,
     struct WaveletNode *root = tree->root;
     return rankRec(root, complete_alphabet, letter, position + 1);
 }
+
+char accessRec(struct WaveletNode *node, char *complete_alphabet, int position) {
+    bool encoding = bitVecGetOnPosition(node->bit_vector, position);
+
+    if (encoding == FALSE) {
+        if (isLeafNode(node->left_child)) {
+            return node->left_child->letter;
+        }
+
+        int freq = getOccurrenceCount(node->bit_vector, position, encoding);
+        return accessRec(node->left_child, complete_alphabet, freq);
+    } else {
+        if (isLeafNode(node->right_child)) {
+            return node->right_child->letter;
+        }
+
+        int freq = getOccurrenceCount(node->bit_vector, position, encoding);
+        return accessRec(node->right_child, complete_alphabet, freq);
+    }
+}
+
+char access(struct WaveletTree *tree, char *complete_alphabet, int position) {
+    struct WaveletNode *root = tree->root;
+    return accessRec(root, complete_alphabet, position);
+}

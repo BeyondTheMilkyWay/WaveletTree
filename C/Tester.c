@@ -108,9 +108,31 @@ void testRanking() {
     deleteTree(tree);
 }
 
+void testAccessing() {
+    char tmp[] = "Peter_Piper_picked_a_peck_of_pickled_peppers$";
+    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    strcpy(test, tmp);
+
+    char *used_alphabet = extractAlphabetLetters(test);
+    struct WaveletTree *tree = buildTree(test, used_alphabet);
+
+    assert(access(tree, used_alphabet, 0) == 'P');
+    assert(access(tree, used_alphabet, 9) == 'e');
+    assert(access(tree, used_alphabet, 18) == '_');
+    assert(access(tree, used_alphabet, 19) == 'a');
+    assert(access(tree, used_alphabet, 42) == 'r');
+    assert(access(tree, used_alphabet, 44) == '$');
+
+    print("Accessing tests [PASSED]");
+
+    free((void *) test);
+    deleteTree(tree);
+}
+
 void testAll() {
     testReplace();
     testBitVector();
     testTreeBuilding();
     testRanking();
+    testAccessing();
 }

@@ -47,4 +47,8 @@ int rankRec(struct WaveletNode *node, char *complete_alphabet,
 int rank(struct WaveletTree *tree, char *complete_alphabet,
          int position, char letter);
 
+char accessRec(struct WaveletNode *node, char *complete_alphabet, int position);
+
+char access(struct WaveletTree *tree, char *complete_alphabet, int position);
+
 #endif //C_WAVELET_TREE_H
