@@ -144,7 +144,7 @@ void testSelecting() {
     assert(selectOp(tree, used_alphabet, 'o', 6) == -1);
     assert(selectOp(tree, used_alphabet, 'p', 2) == 12);
 
-    print("Selection tests [PASSED]");
+    print("Selecting tests [PASSED]");
 
     free((void *) test);
     deleteTree(tree);
