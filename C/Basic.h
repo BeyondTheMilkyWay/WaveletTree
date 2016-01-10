@@ -1,4 +1,4 @@
-//
+// Basic headers used in all files.
 // Created by dsisejkovic on 10.01.16..
 //
 

@@ -1,4 +1,4 @@
-//
+// Tester implementations: used for unit testing all implemented wavelet tree functions.
 // Created by dsisejkovic on 10.01.16..
 //
 

@@ -15,11 +15,10 @@ int main() {
 //    printf("%s\n", input);
 //    printf("%s\n", used_alphabet);
 
-
     testAll();
 //    struct WaveletTree *tree = buildTree(input, used_alphabet);
-
-
+//
+//
 //    free((void *) input);
 //    free((void *) tree);
     return 0;

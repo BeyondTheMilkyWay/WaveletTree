@@ -1,4 +1,4 @@
-//
+// WaveletTree implementation.
 // Created by dsisejkovic on 10.01.16..
 //
 
@@ -175,8 +175,6 @@ int selectOp(struct WaveletTree *tree, char *complete_alphabet, char letter, int
     struct WaveletNode *node = tree->root;
 
     // find leaf node containing 'letter'
-    int index = binarySearchGetIndex(complete_alphabet, letter);
-
     // bottom-up procedure: find starting node
     while (!isLeafNode(node)) {
         bool encoding = getEncodingType(complete_alphabet, letter, node->alphabet_start, node->alphabet_end);

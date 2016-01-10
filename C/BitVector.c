@@ -1,4 +1,4 @@
-//
+// BitVector implementation.
 // Created by dsisejkovic on 10.01.16..
 //
 #include "BitVector.h"

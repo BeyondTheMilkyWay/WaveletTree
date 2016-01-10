@@ -1,4 +1,4 @@
-//
+// Basic unit test functions for Wavelet tree building and querying.
 // Created by dsisejkovic on 10.01.16..
 //
 
