@@ -82,3 +82,18 @@ char *getBitVectorAsString(struct BitVector *bit_vector) {
 
     return str;
 }
+
+int getOccurrenceCount(struct BitVector *bit_vector, int max_position, bool value) {
+    if (max_position > bit_vector->size) {
+        error("Position can not be greater than bit_vector size.");
+    }
+
+    int counter = 0;
+    for (int i=0; i< max_position; ++i) {
+        if (bitVecGetOnPosition(bit_vector, i) == value) {
+            ++counter;
+        }
+    }
+
+    return counter;
+}

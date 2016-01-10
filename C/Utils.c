@@ -112,10 +112,11 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
     fclose(file);
 
     // do reallocation to skip all new_lines
-//    all_lines = realloc(all_lines, (real_len + 1) * sizeof(char));
-//    all_lines[real_len] = '$';
+    all_lines = realloc(all_lines, (real_len + 1) * sizeof(char));
+    all_lines[real_len] = '$';
 
-    all_lines = realloc(all_lines, real_len * sizeof(char));
+
+//    all_lines = realloc(all_lines, real_len * sizeof(char));
 //    all_lines[real_len] = '$';
 
     *input = all_lines;

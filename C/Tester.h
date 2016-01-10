@@ -12,6 +12,8 @@ void testBitVector();
 
 void testTreeBuilding();
 
+void testRanking();
+
 void testAll();
 
 #endif //C_TESTER_H

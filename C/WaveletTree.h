@@ -21,7 +21,15 @@ struct WaveletTree {
     struct WaveletNode *root;
 };
 
+
+void deleteNode(struct WaveletNode *node);
+
+void deleteTree(struct WaveletTree *tree);
+
 bool isLeafNode(struct WaveletNode *node);
+
+bool getEncodingType(char *complete_alphabet, char letter,
+                     int left, int right);
 
 void encodeToBitVector(struct BitVector *bit_vector, char *data_str_part,
                        char *complete_alphabet, int left, int right);
@@ -32,5 +40,11 @@ struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
                             int left, int right);
 
 struct WaveletTree *buildTree(char *input_str, char *complete_alphabet);
+
+int rankRec(struct WaveletNode *node, char *complete_alphabet,
+            char letter, int position);
+
+int rank(struct WaveletTree *tree, char *complete_alphabet,
+         int position, char letter);
 
 #endif //C_WAVELET_TREE_H

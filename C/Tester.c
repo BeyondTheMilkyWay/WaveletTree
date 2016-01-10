@@ -4,8 +4,6 @@
 
 #include <assert.h>
 #include "Tester.h"
-#include "Utils.h"
-
 
 void print(char *msg) {
     printf("|%s\n", msg);
@@ -55,7 +53,13 @@ void testTreeBuilding() {
     struct WaveletNode *right_node = tree->root->right_child;
     assert(compareStrings(getBitVectorAsString(right_node->bit_vector), "10110011") == TRUE);
 
+    struct WaveletNode *left_left_node = tree->root->left_child->left_child;
+    assert(compareStrings(getBitVectorAsString(left_left_node->bit_vector), "010") == TRUE);
+
     print("TreeBuild tests [PASSED]");
+
+    free((void *) test);
+    deleteTree(tree);
 }
 
 void testReplace() {
@@ -75,10 +79,38 @@ void testReplace() {
     assert(test[5] == '_');
 
     print("ReplaceSpaces tests [PASSED]");
+
+    free((void *) test);
+}
+
+void testRanking() {
+    char tmp[] = "Peter_Piper_picked_a_peck_of_pickled_peppers$";
+    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    strcpy(test, tmp);
+
+    char *used_alphabet = extractAlphabetLetters(test);
+    struct WaveletTree *tree = buildTree(test, used_alphabet);
+
+    assert(rank(tree,used_alphabet, 5, 'e') == 2);
+    assert(rank(tree,used_alphabet, 0, '$') == 0);
+    assert(rank(tree,used_alphabet, 15, '$') == 0);
+    assert(rank(tree,used_alphabet, 43, '$') == 0);
+    assert(rank(tree,used_alphabet, 44, '$') == 1);
+    assert(rank(tree,used_alphabet, 28, 'P') == 2);
+    assert(rank(tree,used_alphabet, 33, 'P') == 2);
+    assert(rank(tree,used_alphabet, 44, 'P') == 2);
+    assert(rank(tree,used_alphabet, 38, 'p') == 5);
+    assert(rank(tree,used_alphabet, 44, 't') == 1);
+
+    print("Ranking tests [PASSED]");
+
+    free((void *) test);
+    deleteTree(tree);
 }
 
 void testAll() {
     testReplace();
     testBitVector();
     testTreeBuilding();
+    testRanking();
 }

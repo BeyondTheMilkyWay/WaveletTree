@@ -7,6 +7,7 @@
 
 #include "Basic.h"
 #include <stdio.h>
+#include "Utils.h"
 
 struct BitVector {
     char *bits;
@@ -26,5 +27,7 @@ void freeBitVector(struct BitVector *bit_vector);
 void printBitVector(struct BitVector *bit_vector);
 
 char *getBitVectorAsString(struct BitVector *bit_vector);
+
+int getOccurrenceCount(struct BitVector *bit_vector, int max_position, bool value);
 
 #endif //C_BITVECTOR_H
