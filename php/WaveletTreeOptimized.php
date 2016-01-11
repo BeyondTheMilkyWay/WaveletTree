@@ -113,7 +113,7 @@ class WaveletTree
             return 0;
         }
 
-        return $this->rankRecursive($this->root, $index + 1, $letter, $this->alphabet);
+        return $this->rankRecursive($this->root, $index + 1, $letter);
     }
 
     /**
@@ -386,9 +386,9 @@ if ($totalMemoryUsage < 1024) {
     print round($totalMemoryUsage / 1048576, 2) . " MB\n";
 }
 
-//for($i=0;$i<45;$i++){
-//    print "Access ($i) :" . $waveletTree->access($i) . "\n";
-//}
+for($i=0;$i<45;$i++){
+    print "Access ($i) :" . $waveletTree->access($i) . "\n";
+}
 print $waveletTree->rank(5,'e');
 for($j=0;$j<strlen($inputString);$j++) {
     for($i=0;$i<45;$i++){
