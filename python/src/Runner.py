@@ -4,6 +4,13 @@ from FASTA import FASTA
 from WaveletTree import WaveletTree
 
 
+"""
+    Main entry for building and doing queries on WaveletTree data structure
+    Program arguments: <file> <task> <task_args...>
+        <file> - file path to FASTA in file
+        <task> - name of the query to run [access, rank, select]
+        <task_args> - arguments for query
+"""
 if __name__ == '__main__':
 
     if len(sys.argv) < 3:

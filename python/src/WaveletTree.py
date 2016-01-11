@@ -1,6 +1,8 @@
 from WaveletNode import WaveletNode
 
-
+"""
+    WaveletTree class represents one Wavelet tree data structure
+"""
 class WaveletTree:
     def __init__(self):
         self.root_node = None
@@ -24,7 +26,7 @@ class WaveletTree:
 
         return WaveletTree.__access(self.root_node, index)
 
-    """ Returns position in string where 'character' occurs for the 'nth_occurrence' time """
+    """ Returns position in string at which 'character' occurs for the 'nth_occurrence' time """
     def select(self, nth_occurrence, character):
         self.check_character(character)
 
@@ -47,8 +49,8 @@ class WaveletTree:
         if character not in self.root_node.alphabet:
             raise ValueError('Character is not in alphabet')
 
-    # Internal recursive method that builds tree
     @staticmethod
+    # Internal recursive method that builds tree
     def __build(node, alphabet, data):
         if len(alphabet) in [0, 1]:
             return
@@ -73,6 +75,7 @@ class WaveletTree:
         WaveletTree.__build(node.right, right_sub_alphabet, right_sub_data)
 
     @staticmethod
+    # Internal recursive method that executes rank query
     def __rank(node, position, character):
         if len(node.alphabet) == 1:
             return position
@@ -87,6 +90,7 @@ class WaveletTree:
         return WaveletTree.__rank(child, new_position, character)
 
     @staticmethod
+    # Internal recursive method that executes access query
     def __access(node, index):
         if len(node.alphabet) == 1:
             return node.alphabet[0]
@@ -101,6 +105,7 @@ class WaveletTree:
 
 
     @staticmethod
+    # Internal recursive method that executes select query
     def __select(node, nth_occurence, character):
         is_left = character in node.left.alphabet
         bit_type = '0' if is_left else '1'
@@ -110,6 +115,7 @@ class WaveletTree:
         return new_index if not node.parent else WaveletTree.__select(node.parent, new_index + 1, character)
 
     @staticmethod
+    # Internal recursive helper method for logging node and all its childs
     def __log(node):
         if not node or len(node.bit_vector) == 0:
             return
