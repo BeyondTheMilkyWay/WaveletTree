@@ -333,7 +333,7 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Calculates memory usage.
+	 * Calculate memory usage.
 	 * 
 	 * @return memory usage.
 	 */
