@@ -16,7 +16,7 @@ class WaveletTree:
         self.check_character(character)
 
         # TODO it will not count character at given 'position'. Does it need to count it?
-        return WaveletTree.__rank(self.root_node, position, character)
+        return WaveletTree.__rank(self.root_node, position+1, character)
 
     """ Returns character at 'index' position in string """
     def access(self, index):
