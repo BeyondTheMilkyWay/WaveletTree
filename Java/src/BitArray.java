@@ -139,7 +139,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Returns the indexed bit in this BitArray.
+	 * Return the indexed bit in this BitArray.
 	 * 
 	 * @param index
 	 *            index.
@@ -154,7 +154,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Sets the indexed bit in this BitArray.
+	 * Set the indexed bit in this BitArray.
 	 * 
 	 * @param index
 	 *            index.
@@ -180,7 +180,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Returns the length of this BitArray.
+	 * Return the length of this BitArray.
 	 * 
 	 * @return length;
 	 */
@@ -203,7 +203,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Compares two objects.
+	 * Compare two objects.
 	 * 
 	 * @return <code>true</code> if equals, else <code>false</code>.
 	 */
@@ -240,7 +240,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Returns a hash code value for this bit array.
+	 * Return a hash code value for this bit array.
 	 * 
 	 * @return a hash code value for this bit array.
 	 */
@@ -297,7 +297,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Finds index of <code>occurrenceNum</code>-th occurrence of given bit.
+	 * Find index of <code>occurrenceNum</code>-th occurrence of given bit.
 	 * 
 	 * @param type
 	 *            bit type.
@@ -362,7 +362,7 @@ public class BitArray {
 	private static final int BYTES_PER_LINE = 8;
 
 	/**
-	 * Returns a string representation of this BitArray.
+	 * Return a string representation of this BitArray.
 	 * 
 	 * @return string representation.
 	 */
@@ -392,7 +392,7 @@ public class BitArray {
 	}
 
 	/**
-	 * Truncates array on multiplier of <code>BITS_PER_UNIT</code>.
+	 * Truncate array on multiplier of <code>BITS_PER_UNIT</code>.
 	 * 
 	 * @return truncated array.
 	 */
