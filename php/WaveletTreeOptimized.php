@@ -11,6 +11,7 @@ class WaveletTree
     public function __construct($string)
     {
         list($this->root, $this->alphabet) = $this->createNode($string);
+        $this->root->setParent(null);
         $this->createChildNodes($this->root, $string);
     }
 
@@ -28,12 +29,14 @@ class WaveletTree
         }
 
         $leftNode = $this->createNode($left)[0];
+        $leftNode->setParent($parent);
         $parent->setLeftChild($leftNode);
         if (!$leftNode->isLeaf()) {
             $this->createChildNodes($leftNode, $left);
         }
         $rightNode = $this->createNode($right)[0];
         $parent->setRightChild($rightNode);
+        $rightNode->setParent($parent);
         if (!$rightNode->isLeaf()) {
             $this->createChildNodes($rightNode, $right);
         }
@@ -184,6 +187,18 @@ class WaveletTree
             }
         }
     }
+
+    public function select($occurenceNum, $letter) {
+
+        $letterIndex = $this->alphabet[$letter];
+        $currentNode = $this->root;
+
+        return $this->selectRecursive($currentNode,$letter,$occurenceNum,$this->alphabet);
+    }
+
+    private function selectRecursive($currentNode,$letter,$occurenceNum,$alphabet) {
+            return -1;
+    }
 }
 
 class Node
@@ -192,6 +207,9 @@ class Node
     private $isLeaf;
     /** Node[] $children */
     private $children;
+    /** @var  Node $parent */
+    private $parent;
+
     /** @var  array */
     private $dictionary;
 
@@ -257,6 +275,23 @@ class Node
 
         return $counter;
     }
+
+    /**
+     * @return Node
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Node $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
 }
 
 //get memory usage 
@@ -309,6 +344,9 @@ for($j=0;$j<strlen($inputString);$j++) {
         print "Rank ($i,$a) :" . $waveletTree->rank($i,$a) . "\n";
     }
 }
+
+//print $waveletTree->select(0,"$");
+//print $waveletTree->select(1,"$");
 
 
 ?>
