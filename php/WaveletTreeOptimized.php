@@ -83,8 +83,11 @@ class WaveletTree
         } elseif ($b == '$') {
             return 1;
         }
-
         return strcmp($a, $b);
+    }
+
+    public function getFinalAlphabet() {
+        return $this->alphabet;
     }
 
     public static function getAlphabet($string)
@@ -187,16 +190,36 @@ class WaveletTree
         }
     }
 
-    public function select($occurenceNum, $letter) {
-
-        $letterIndex = $this->alphabet[$letter];
+    public function select($occurrenceNum, $letter)
+    {
+        $letterIndex = 0;
+        foreach ($this->alphabet as $key => $value) {
+            if ($key == $letter) {
+                break;
+            }
+            $letterIndex++;
+        }
         $currentNode = $this->root;
+        while (!$currentNode->isLeaf()) {
+            if ($currentNode->getLeftChild()->characterInNode($this->alphabet, $letter)) {
+                $currentNode = $currentNode->getLeftChild();
+            } else {
+                $currentNode = $currentNode->getRightChild();
+            }
+        }
 
-        return $this->selectRecursive($currentNode,$letter,$occurenceNum,$this->alphabet);
+        return $this->selectRecursive($currentNode, $letter, $occurrenceNum, $this->alphabet);
     }
 
-    private function selectRecursive($currentNode,$letter,$occurenceNum,$alphabet) {
-            return -1;
+    private function selectRecursive($currentNode, $letter, $occurrenceNum, $alphabet)
+    {
+        $letterCoded = $currentNode->getLetterCoded($this->alphabet, $letter);
+        $index       = $currentNode->calculateOccurrence($letterCoded, $occurrenceNum + 1);
+        if ($currentNode->getParent() == null) {
+            return $index;
+        } else {
+            return $this->selectRecursive($currentNode->getParent(), $letter, $index, $alphabet);
+        }
     }
 }
 
@@ -264,7 +287,7 @@ class Node
         $i=0;
         foreach($dictionary as $key => $value) {
             if($key == $character) {
-                if($this->leftCharacter >= $i && $this->rightCharacter <= $i) {
+                if($this->leftCharacter <= $i && $this->rightCharacter >= $i) {
                     return true;
                 }else {
                     return false;
@@ -303,6 +326,23 @@ class Node
         }
 
         return $counter;
+    }
+
+    public function calculateOccurrence($bit, $occurrences)
+    {
+        if($occurrences == 0) {
+            return -1;
+        }
+        $counter = 0;
+        for ($i = 0; $i < count($this->binary); $i++) {
+            if ($this->binary[$i] == $bit) {
+                $counter++;
+            }
+            if ($counter == $occurrences) {
+                return $i;
+            }
+        }
+        return -1;
     }
 
     public function getFirstCharacter($alphabet) {
@@ -386,19 +426,22 @@ if ($totalMemoryUsage < 1024) {
     print round($totalMemoryUsage / 1048576, 2) . " MB\n";
 }
 
-for($i=0;$i<45;$i++){
-    print "Access ($i) :" . $waveletTree->access($i) . "\n";
-}
-print $waveletTree->rank(5,'e');
-for($j=0;$j<strlen($inputString);$j++) {
-    for($i=0;$i<45;$i++){
-        $a = $inputString[$j];
-        print "Rank ($i,$a) :" . $waveletTree->rank($i,$a) . "\n";
+//for($i=0;$i<45;$i++){
+//    print "Access ($i) :" . $waveletTree->access($i) . "\n";
+//}
+//print $waveletTree->rank(5,'e');
+//for($j=0;$j<strlen($inputString);$j++) {
+//    for($i=0;$i<45;$i++){
+//        $a = $inputString[$j];
+//        print "Rank ($i,$a) :" . $waveletTree->rank($i,$a) . "\n";
+//    }
+//}
+
+
+foreach($waveletTree->getFinalAlphabet() as $key => $value) {
+    for($i=0; $i< 10;$i++) {
+        print "Select($i,$key) = ". $waveletTree->select($i,$key)."\n";
     }
 }
-
-//print $waveletTree->select(0,"$");
-//print $waveletTree->select(1,"$");
-
 
 ?>
