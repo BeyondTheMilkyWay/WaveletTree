@@ -24,3 +24,5 @@ class FASTA:
                     # TODO remove '_'
                     if c.isalpha() or c in ['_', '$']:
                         self.data.append(c)
+
+        file.close()

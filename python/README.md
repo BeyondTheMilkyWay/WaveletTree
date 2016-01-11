@@ -10,10 +10,11 @@ It includes the following query methods on data structure:
 Make sure you have `python 2.7` installed
 
 ### How to run
-    $ python src/Runner.py <in_file> <task> <task_args...>
+    $ python src/Runner.py <in_file> <out_file> <task> <task_args...>
 
 #### Program arguments:
 - `<in_file>` - path to FASTA file which is used to build Wavelet tree
+- `<out_file>` - path to where to write result
 - `<task>` - name of the task to run
   - `build` - just builds the tree
   - `rank <position> <character>` - builds the tree and executes rank query with `position` and `character` arguments
