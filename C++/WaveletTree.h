@@ -11,14 +11,13 @@
 
 class WaveletTree {
 public:
-
     int rank(char q, int x);
     int select(char q, int x);
     char access(int x);
 
 private:
-    std::shared_ptr<WaveletNode> root;
-    void build();
+    WaveletNodeP root;
+    void build(std::string &str);
 };
 
 

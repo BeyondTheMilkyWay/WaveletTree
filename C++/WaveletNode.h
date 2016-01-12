@@ -9,25 +9,25 @@
 #include <vector>
 #include <bitset>
 
-typedef std::shared_ptr<WaveletNode> WaveletNodeP;
-
 template <int bits>
 class WaveletNode {
 public:
-    WaveletNode(const std::bitset<bits> &bitset, const std::vector<char> &alphabet,
-                const std::weak_ptr<WaveletNode> &parent, const WaveletNodeP &left, const WaveletNodeP &right) : bitset(
-            bitset), alphabet(alphabet), parent(parent), left(left), right(right) { }
-
-    int binary_rank(bool q, int x); // binary rank [0, x]
-private:
     std::bitset<bits> bitset;
     std::vector<char> alphabet;
     std::weak_ptr<WaveletNode> parent;
-    WaveletNodeP left;
-    WaveletNodeP right;
+    std::shared_ptr<WaveletNode> left;
+    std::shared_ptr<WaveletNode> right;
 
-    bool bitcode(char q); // code for q in alphabet for this node
+    WaveletNode(const std::bitset<bits> &bitset, const std::vector<char> &alphabet,
+                const std::shared_ptr<WaveletNode> &left, const std::shared_ptr<WaveletNode> &right) : bitset(
+            bitset), alphabet(alphabet), left(left), right(right) { }
+
+    int binary_rank(bool q, int x); // binary rank [0, x]
+
+    static bool bitcode(std::vector<char> alphabet, char q); // code for q in alphabet for this node
 };
 
+template <int bits>
+using WaveletNodeP<bits> = std::shared_ptr<WaveletNode<bits>>;
 
 #endif //WAVELETTREE_WAVELETNODE_H

@@ -13,8 +13,8 @@ int WaveletNode::binary_rank(bool q, int x) {
 }
 
 
-bool WaveletNode::bitcode(char q) {
-  int pos = std::find(this->alphabet.begin(), this->alphabet.end(), q) - this->alphabet.begin();
-  unsigned long size = this->alphabet.size();
+static bool WaveletNode::bitcode(std::vector<char> alphabet, char q) {
+  int pos = std::find(alphabet.begin(), alphabet.end(), q) - alphabet.begin();
+  unsigned long size = alphabet.size();
   return pos >= size / 2;
 }
