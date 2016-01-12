@@ -178,7 +178,6 @@ public class WaveletTree {
 				currNode = currNode.getLeftChild();
 			} else {
 				if (currNode.getRightChild() == null) break;
-				//letterIndex -= alphHalf;
 				currNode = currNode.getRightChild();
 			}
 		}
