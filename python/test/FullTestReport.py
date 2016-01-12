@@ -3,7 +3,7 @@ from WaveletTree import WaveletTree
 
 
 def report_rank(tree):
-    print 'Rank simple.fas'
+    print 'Rank simple.fa'
 
     for c in tree.root_node.alphabet:
         for idx in xrange(len(tree.root_node.bit_vector)):
@@ -11,14 +11,14 @@ def report_rank(tree):
 
 
 def report_access(tree):
-    print 'Access simple.fas'
+    print 'Access simple.fa'
 
     for idx in xrange(len(tree.root_node.bit_vector)):
         print 'access(%s) = %s' % (idx, tree.access(idx))
 
 
 def report_select(tree):
-    print 'Select simple.fas'
+    print 'Select simple.fa'
 
     for c in tree.root_node.alphabet:
         for nth_occurence in xrange(10):
@@ -27,7 +27,7 @@ def report_select(tree):
 
 if __name__ == '__main__':
 
-    fasta_file = FASTA('../simple.fas')
+    fasta_file = FASTA('../simple.fa')
     fasta_file.read()
 
     alphabet = list(set(fasta_file.data))
