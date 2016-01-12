@@ -5,7 +5,14 @@
 #include "Basic.h"
 #include "WaveletTree.h"
 #include "Tester.h"
+#include "Timer.h"
 
+
+
+void logn(char* msg)
+{
+    printf("|%s\n", msg);
+}
 
 /**
  * Arguments: <input-file-path> <query-type> <args>
@@ -31,15 +38,30 @@ int main(int argc, char *argv[]) {
         char *file_name = argv[1];
         char *input;
         char *used_alphabet;
+
+        logn("Reading input data...");
         getAlphabetFromFile(file_name, &used_alphabet, &input);
-        struct WaveletTree *tree = buildTree(input, used_alphabet);
+
+
+        printf("%d", (int) strlen(input));
+        printf("ne radi\n");
+        printf("%d", (int) strlen(used_alphabet));
+
+        logn("Building wavelet tree...");
+        timerStart();
+        struct WaveletTree *tree = buildTree(&input, &used_alphabet);
+        timerStop();
+        printf("Execution time [build]: %f ms\n", timerGetTimeSpan());
 
         char *query = argv[2];
         char *result = (char *) malloc(25 * sizeof(char));
         if (strcmp(query, "access") == 0) {
             int index = atoi(argv[3]);
+            timerStart();
             char access = accessOp(tree, used_alphabet, index);
+            timerStop();
 
+            printf("Execution time: %f ms\n", timerGetTimeSpan());
             snprintf(result, 25, "access(%d) = %c", index, access);
             printf("|access(%d) = %c\n", index, access);
         } else if (strcmp(query, "rank") == 0) {
