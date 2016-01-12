@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <string>
 
 class BitArray {
 private:
@@ -21,6 +22,8 @@ public:
 
     bool get(int i);
     void set(int i, char value);
+
+    std::string toString();
 };
 
 

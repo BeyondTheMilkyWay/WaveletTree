@@ -18,7 +18,7 @@ bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
 
 WaveletNodeP build2(std::string &str, int l, int r, std::vector<char> &alphabet) {
   if (alphabet.size() <= 1) {
-    return std::make_shared<WaveletNodeNull>();
+    return std::make_shared<WaveletNodeNull>(alphabet);
   }
   BitArray bitArray(r - l + 1);
   std::map<char, bool> map;
@@ -26,9 +26,11 @@ WaveletNodeP build2(std::string &str, int l, int r, std::vector<char> &alphabet)
     bitArray.set(i - l, code(map, alphabet, str[i]));
   }
   std::vector<char> lAlphabet(alphabet.begin(), alphabet.begin() + alphabet.size() / 2);
-  WaveletNodeP left = build2(str, l, (l + r)/2, lAlphabet);
+  int mid = (l + r - 1)/2;
+  std::cout << "l: " << l << " r: " << r << " mid= " << mid << std::endl;
+  WaveletNodeP left = build2(str, l, mid, lAlphabet);
   std::vector<char> rAlphabet(alphabet.begin() + alphabet.size() / 2, alphabet.end());
-  WaveletNodeP right = build2(str, (l + r)/2 + 1, r, rAlphabet);
+  WaveletNodeP right = build2(str, mid + 1, r, rAlphabet);
   std::shared_ptr<WaveletNode> node = std::make_shared<WaveletNode>(bitArray, alphabet, left, right);
   left->parent = node;
   right->parent = node;
@@ -53,7 +55,7 @@ void WaveletTree::build(std::string &str) {
   std::sort(alphabet.begin(), alphabet.end());
 
   // build tree
-  this->root = build2(str, 0, alphabet.size()-1, alphabet);
+  this->root = build2(str, 0, str.size()-1, alphabet);
 }
 
 int WaveletTree::rank(char q, int x) {

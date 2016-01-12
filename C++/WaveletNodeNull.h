@@ -11,7 +11,7 @@
 class WaveletNodeNull : public WaveletNode {
 
 public:
-    WaveletNodeNull() : WaveletNode(bitArray, alphabet, left, right) { }
+    WaveletNodeNull(std::vector<char> &alphabet) : WaveletNode(*(new BitArray(0)), alphabet, NULL, NULL) { }
     virtual bool isNull() override;
 };
 

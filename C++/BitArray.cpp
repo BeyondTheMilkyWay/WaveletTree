@@ -12,3 +12,11 @@ bool BitArray::get(int i) {
 void BitArray::set(int i, char value) {
   arr[i] = value;
 }
+
+std::string BitArray::toString() {
+  std::string str("");
+  for (char c : arr) {
+    str.push_back(c+'0');
+  }
+  return str;
+}
