@@ -37,7 +37,6 @@ public class WaveletTree {
 		}
 		
 		this.alphabet = getDistinct(seq);
-		System.out.println(Arrays.toString(this.alphabet));
 		this.rootNode = new WaveletNode(seq.size(), (byte) 0,
 				(byte) (this.alphabet.length - 1));
 
@@ -184,7 +183,7 @@ public class WaveletTree {
 		
 
 		// call recursive method
-		return select(currNode, letter, occurrenceNum, alphabet);
+		return select(currNode, letter, occurrenceNum - 1, alphabet);
 	}
 
 	/**
