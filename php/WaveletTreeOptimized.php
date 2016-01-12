@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class WaveletTree represents wavelet tree
+ */
 class WaveletTree
 {
 
@@ -15,6 +18,12 @@ class WaveletTree
         $this->createChildNodes($this->root, $string, 0);
     }
 
+    /**
+     * Method creates child nodes from root node
+     * @param $parent
+     * @param $string
+     * @param $left
+     */
     public function createChildNodes($parent, $string, $left)
     {
         $binary = $parent->getBinary();
@@ -43,6 +52,13 @@ class WaveletTree
 
     }
 
+    /**
+     * Method creates node
+     * @param $string
+     * @param $left
+     *
+     * @return array|null
+     */
     public function createNode($string, $left)
     {
         if ($string == null || $string == '') {
@@ -394,8 +410,10 @@ $memUsageStart = memory_get_usage(false);
 $startTime = round(microtime(true) * 1000);
 
 if (!isset($argv[1])) {
-    print "Usage: php WaveletTree.php input.fas";
-
+    print "Usage: php WaveletTree.php input.fas output operation params\n";
+    print "access num\n";
+    print "rank index letter \n";
+    print "select occurrenceNumber letter \n";
     return;
 }
 $file        = fopen($argv[1], 'r');
@@ -429,23 +447,25 @@ if ($totalMemoryUsage < 1024) {
     print round($totalMemoryUsage / 1048576, 2) . " MB\n";
 }
 
-//for($i=0;$i<45;$i++){
-//    print "Access ($i) :" . $waveletTree->access($i) . "\n";
-//}
-//print $waveletTree->rank(5,'e');
-//for($j=0;$j<strlen($inputString);$j++) {
-//    for($i=0;$i<45;$i++){
-//        $a = $inputString[$j];
-//        print "Rank ($i,$a) :" . $waveletTree->rank($i,$a) . "\n";
-//    }
-//}
+$operation = $argv[3];
 
-
-foreach($waveletTree->getFinalAlphabet() as $key => $value) {
-    for($i=-1; $i< 10;$i++) {
-        $j=$i+1;
-        print "Select($j,$key) = ". $waveletTree->select($i,$key)."\n";
-    }
+if($operation == "access") {
+    $result = $waveletTree->access($argv[4]);
+}elseif($operation == "rank") {
+    $result = $waveletTree->rank($argv[4], $argv[5]);
+}elseif($operation == "select") {
+    $result = $waveletTree->select($argv[4]-1, $argv[5]);
+}else {
+    print "Invalid operation";
+    return;
 }
+
+
+//write to output file
+$outputFile = fopen($argv[2], 'w');
+fwrite($outputFile, $result);
+fwrite($outputFile, "\r\n");
+fflush($outputFile);
+fclose($outputFile);
 
 ?>
