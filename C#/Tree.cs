@@ -13,7 +13,6 @@ namespace BioInf_Dragicevic
         public Tree(string content)
         {
             root = buildTree(content, null);
-            List<Char> alphabet = new List<Char>();
             List<byte> bits = new List<byte>();
         }
         private Node buildTree(string content, Node parent)
@@ -21,6 +20,7 @@ namespace BioInf_Dragicevic
             Node currentNode = new Node();
             List<Char> alphabet = new List<Char>();
             List<byte> bits = new List<byte>();
+            //find alphabet
             for (int i = 0; i < content.Length; i++)
             {
                 if (!alphabet.Contains(content[i]))
@@ -30,6 +30,7 @@ namespace BioInf_Dragicevic
             }
             alphabet.Sort();
             int alphabetHalf = alphabet.Count / 2;
+            //add 0 and 1 values
             for (int i = 0; i < content.Length; i++)
             {
                if(alphabet.IndexOf(content[i]) < alphabetHalf) {
@@ -40,9 +41,11 @@ namespace BioInf_Dragicevic
                    bits.Add(1);
                }
             }
+            //set variables to current node
             currentNode.valuesList = bits;
             currentNode.alphabet = alphabet;
             currentNode.parent = parent;
+            //build children
             if (!(alphabet.Count <= 2))
             {
                 StringBuilder childZeroContent = new StringBuilder();
@@ -65,6 +68,7 @@ namespace BioInf_Dragicevic
             }
             return currentNode;
         }
+        
         public int rank(int count, char symbol) {
             return root.getRank(count+1, symbol);
         }

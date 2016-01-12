@@ -16,9 +16,11 @@ namespace BioInf_Dragicevic
                 System.Environment.Exit(1);
             }
             string fileContent = Parser.readFasta(args[0]);
+            //initialize and build tree
             Tree tree = new Tree(fileContent);
             Console.WriteLine("BUILT");
             string result = "";
+            //run command
             if (args[1] == "select")
             {
                 result = "select(" + args[2] + ", " + args[3] + ") = " + tree.select(Int32.Parse(args[2]), args[3][0]);
