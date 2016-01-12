@@ -126,6 +126,13 @@ class WaveletTree
         return $this->root;
     }
 
+    /**
+     * Rank method in wavelet tree
+     * @param $index
+     * @param $letter
+     *
+     * @return int|mixed
+     */
     public function rank($index, $letter)
     {
         if (!isset($this->alphabet[$letter])) {
@@ -136,6 +143,7 @@ class WaveletTree
     }
 
     /**
+     * Access method in wavelet tree
      * @param $index
      *
      * @return string
@@ -206,6 +214,13 @@ class WaveletTree
         }
     }
 
+    /**
+     * Select method in wavelet tree
+     * @param $occurrenceNum
+     * @param $letter
+     *
+     * @return int
+     */
     public function select($occurrenceNum, $letter)
     {
         if($occurrenceNum < 0) {
@@ -242,6 +257,9 @@ class WaveletTree
     }
 }
 
+/**
+ * Class Node represents Node in Wawelet tree
+ */
 class Node
 {
     private $binary;
@@ -265,6 +283,10 @@ class Node
         $this->rightCharacter = $rightCharacter;
     }
 
+    /**
+     * Return bits of node
+     * @return mixed
+     */
     public function getBinary()
     {
         return $this->binary;
@@ -459,7 +481,6 @@ if($operation == "access") {
     print "Invalid operation";
     return;
 }
-
 
 //write to output file
 $outputFile = fopen($argv[2], 'w');
