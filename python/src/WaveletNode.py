@@ -1,4 +1,7 @@
 
+"""
+    WaveletNode class represents one node in Wavelet tree data structure.
+"""
 class WaveletNode:
 
     def __init__(self, alphabet, parent=None):
@@ -8,9 +11,11 @@ class WaveletNode:
         self.right = None
         self.parent = parent
 
+    """ Method for adding new bit to bit_vector """
     def add(self, bit):
         self.bit_vector += bit
 
+    """ Method for calculating index of nth_occurence of bit_type in bit_vector """
     def nth_occurence(self, nth_occurence, bit_type):
         occurences = 0
         last_index = -1
