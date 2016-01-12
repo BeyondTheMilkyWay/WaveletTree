@@ -24,8 +24,7 @@ void printTree(WaveletNode &node, int d) {
   printTree(*(node.right), d+1);
 }
 
-void test1() {
-  std::string str("Peter$");
+void test1(std::string &str) {
   std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
   printTree(*(tree->getRoot()), 0);
 }

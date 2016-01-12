@@ -47,20 +47,26 @@ WaveletNodeP build2(std::string &str, std::vector<char> &alphabet) {
   return node;
 }
 
+void convertString(std::string &str) {
+  for (int i = str.size() - 1; i >= 0; i--) {
+    if (str[i] == ' ') {
+      str[i] = '_';
+    }
+  }
+  str.push_back('$');
+}
+
 void WaveletTree::build(std::string &str) {
   // extract and sort alphabet
   std::cout<<"build"<<std::endl;
+  convertString(str);
   std::set<char> chars;
   for (char c : str) {
     chars.insert(c);
   }
   std::vector<char> alphabet;
   for (char c : chars) {
-    if (c == ' ') {
-      alphabet.push_back('_');
-    } else {
-      alphabet.push_back(c);
-    }
+    alphabet.push_back(c);
   }
   std::sort(alphabet.begin(), alphabet.end());
 

@@ -5,6 +5,6 @@
 #ifndef WAVELETTREE_TESTS_H
 #define WAVELETTREE_TESTS_H
 
-void test1();
+void test1(std::string &str);
 
 #endif //WAVELETTREE_TESTS_H
