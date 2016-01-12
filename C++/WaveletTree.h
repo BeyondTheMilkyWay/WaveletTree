@@ -6,14 +6,19 @@
 #define WAVELETTREE_WAVELETTREE_H
 
 
+#include <memory>
+#include "WaveletNode.h"
+
 class WaveletTree {
 public:
+
     int rank(char q, int x);
     int select(char q, int x);
     char access(int x);
 
 private:
-    WaveletTree root;
+    std::shared_ptr<WaveletNode> root;
+    void build();
 };
 
 
