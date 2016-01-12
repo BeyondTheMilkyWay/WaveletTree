@@ -21,17 +21,16 @@ then comile with following command:
 Now you should see an executable file named 'c-wavelet-tree'.
 To run the file type:
 
-    $ ./c-wavelet-tree <arguments>
+    $ mono Run.exe <arguments>
 
 Following arguments are supported:
 
-- `test`
 - `<input-file-path> access <index>`
 - `<input-file-path> rank <index> <character>`
 - `<input-file-path> select <index> <character>`
 
 ### Authors
 
-- ddragicevic, 2016
+- ddragicevic, 2016g
 
 
