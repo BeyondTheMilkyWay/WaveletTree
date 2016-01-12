@@ -8,26 +8,31 @@
 
 #include <vector>
 #include <bitset>
+#include "BitArray.h"
+#include "NullableObject.h"
 
-template <int bits>
-class WaveletNode {
+class WaveletNode : public NullableObject {
 public:
-    std::bitset<bits> bitset;
+    BitArray bitArray;
     std::vector<char> alphabet;
     std::weak_ptr<WaveletNode> parent;
     std::shared_ptr<WaveletNode> left;
     std::shared_ptr<WaveletNode> right;
 
-    WaveletNode(const std::bitset<bits> &bitset, const std::vector<char> &alphabet,
-                const std::shared_ptr<WaveletNode> &left, const std::shared_ptr<WaveletNode> &right) : bitset(
-            bitset), alphabet(alphabet), left(left), right(right) { }
+    WaveletNode(const BitArray bitArray, const std::vector<char> &alphabet, const std::shared_ptr<WaveletNode> &left,
+                const std::shared_ptr<WaveletNode> &right) : bitArray(bitArray), alphabet(alphabet), left(left),
+                                                             right(right) { }
 
     int binary_rank(bool q, int x); // binary rank [0, x]
 
-    static bool bitcode(std::vector<char> alphabet, char q); // code for q in alphabet for this node
+    // code for q in alphabet for this node
+    static bool bitcode(std::vector<char> alphabet, char q) {
+      int pos = std::find(alphabet.begin(), alphabet.end(), q) - alphabet.begin();
+      unsigned long size = alphabet.size();
+      return pos >= size / 2;
+    }
 };
 
-template <int bits>
-using WaveletNodeP<bits> = std::shared_ptr<WaveletNode<bits>>;
+typedef std::shared_ptr<WaveletNode> WaveletNodeP;
 
 #endif //WAVELETTREE_WAVELETNODE_H

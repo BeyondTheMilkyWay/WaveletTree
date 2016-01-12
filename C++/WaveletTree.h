@@ -11,9 +11,19 @@
 
 class WaveletTree {
 public:
+
+    WaveletTree(std::string &str) {
+      build(str);
+    }
+
     int rank(char q, int x);
     int select(char q, int x);
     char access(int x);
+
+
+    const WaveletNodeP &getRoot() const {
+      return root;
+    }
 
 private:
     WaveletNodeP root;

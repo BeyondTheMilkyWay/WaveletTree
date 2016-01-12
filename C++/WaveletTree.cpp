@@ -4,9 +4,10 @@
 
 #include <set>
 #include <map>
+#include <iostream>
 #include "WaveletTree.h"
 
-static bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
+bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
   if (map.find(q) == map.end()) {
     // key doesn't exist
     map[q] = WaveletNode::bitcode(alphabet, q);
@@ -14,20 +15,20 @@ static bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q)
   return map[q];
 }
 
-static WaveletNodeP build(std::string &str, int l, int r, std::vector<char> &alphabet) {
+WaveletNodeP build2(std::string &str, int l, int r, std::vector<char> &alphabet) {
   if (alphabet.size() <= 1) {
     return NULL;
   }
-  std::bitset<r - l + 1> bitset;
+  BitArray bitArray(r - l + 1);
   std::map<char, bool> map;
   for (int i = l; i <= r; i++) {
-    bitset[i - l] = code(map, alphabet, str[i]);
+    bitArray.set(i - l, code(map, alphabet, str[i]));
   }
   std::vector<char> lAlphabet(alphabet.begin(), alphabet.begin() + alphabet.size() / 2);
-  WaveletNodeP left = build(str, l, (l + r)/2, lAlphabet);
+  WaveletNodeP left = build2(str, l, (l + r)/2, lAlphabet);
   std::vector<char> rAlphabet(alphabet.begin() + alphabet.size() / 2, alphabet.end());
-  WaveletNodeP right = build(str, (l + r)/2 + 1, r, rAlphabet);
-  WaveletNodeP node = new WaveletNode(bitset, alphabet, left, right);
+  WaveletNodeP right = build2(str, (l + r)/2 + 1, r, rAlphabet);
+  std::shared_ptr<WaveletNode> node = std::make_shared<WaveletNode>(bitArray, alphabet, left, right);
   if (left != NULL) left->parent = node;
   if (right != NULL) right->parent = node;
   return node;
@@ -35,6 +36,7 @@ static WaveletNodeP build(std::string &str, int l, int r, std::vector<char> &alp
 
 void WaveletTree::build(std::string &str) {
   // extract and sort alphabet
+  std::cout<<"build"<<std::endl;
   std::set<char> chars;
   for (char c : str) {
     chars.insert(c);
@@ -50,7 +52,7 @@ void WaveletTree::build(std::string &str) {
   std::sort(alphabet.begin(), alphabet.end());
 
   // build tree
-  this->root = build(str, 0, alphabet.size()-1, alphabet);
+  this->root = build2(str, 0, alphabet.size()-1, alphabet);
 }
 
 int WaveletTree::rank(char q, int x) {
