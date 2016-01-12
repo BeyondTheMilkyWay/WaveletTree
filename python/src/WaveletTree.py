@@ -1,3 +1,5 @@
+import StringIO
+
 from WaveletNode import WaveletNode
 
 """
@@ -62,7 +64,10 @@ class WaveletTree:
         right_sub_alphabet = alphabet[half:]
 
         # Build bit vector for current node
-        [node.add('0' if c in left_sub_alphabet else '1') for c in data]
+        bit_vector_buffer = StringIO.StringIO()
+        [bit_vector_buffer.write('0' if c in left_sub_alphabet else '1') for c in data]
+        node.add(bit_vector_buffer.getvalue())
+        bit_vector_buffer.close()
 
         # Split data for left and right node
         left_sub_data = filter(lambda c: c in left_sub_alphabet, data)
