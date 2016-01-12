@@ -17,6 +17,7 @@ namespace BioInf_Dragicevic
             }
             string fileContent = Parser.readFasta(args[0]);
             Tree tree = new Tree(fileContent);
+            Console.WriteLine("BUILT");
             string result = "";
             if (args[1] == "select")
             {

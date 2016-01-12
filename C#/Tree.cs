@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,23 +45,23 @@ namespace BioInf_Dragicevic
             currentNode.parent = parent;
             if (!(alphabet.Count <= 2))
             {
-                string childZeroContent = "";
-                string childOneContent = "";
+                StringBuilder childZeroContent = new StringBuilder();
+                StringBuilder childOneContent = new StringBuilder();
                 for (int i = 0; i < content.Length; i++)
                 {
                     char tempChar = content[i];
                     byte tempValue = bits[i];
                     if (tempValue == 0)
                     {
-                        childZeroContent += tempChar;
+                        childZeroContent.Append(tempChar);
                     }
                     else
                     {
-                        childOneContent += tempChar;
+                        childOneContent.Append(tempChar);
                     }
                 }
-                currentNode.childZero = buildTree(childZeroContent, currentNode);
-                currentNode.childOne = buildTree(childOneContent, currentNode);
+                currentNode.childZero = buildTree(childZeroContent.ToString(), currentNode);
+                currentNode.childOne = buildTree(childOneContent.ToString(), currentNode);
             }
             return currentNode;
         }
