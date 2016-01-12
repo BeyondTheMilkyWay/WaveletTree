@@ -12,8 +12,6 @@ class WaveletNodeNull : public WaveletNode {
 
 public:
     WaveletNodeNull() : WaveletNode(bitArray, alphabet, left, right) { }
-
-
     virtual bool isNull() override;
 };
 

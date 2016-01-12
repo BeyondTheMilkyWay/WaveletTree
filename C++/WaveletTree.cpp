@@ -6,6 +6,7 @@
 #include <map>
 #include <iostream>
 #include "WaveletTree.h"
+#include "WaveletNodeNull.h"
 
 bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
   if (map.find(q) == map.end()) {
@@ -17,7 +18,7 @@ bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
 
 WaveletNodeP build2(std::string &str, int l, int r, std::vector<char> &alphabet) {
   if (alphabet.size() <= 1) {
-    return NULL;
+    return std::make_shared<WaveletNodeNull>();
   }
   BitArray bitArray(r - l + 1);
   std::map<char, bool> map;
@@ -29,8 +30,8 @@ WaveletNodeP build2(std::string &str, int l, int r, std::vector<char> &alphabet)
   std::vector<char> rAlphabet(alphabet.begin() + alphabet.size() / 2, alphabet.end());
   WaveletNodeP right = build2(str, (l + r)/2 + 1, r, rAlphabet);
   std::shared_ptr<WaveletNode> node = std::make_shared<WaveletNode>(bitArray, alphabet, left, right);
-  if (left != NULL) left->parent = node;
-  if (right != NULL) right->parent = node;
+  left->parent = node;
+  right->parent = node;
   return node;
 }
 

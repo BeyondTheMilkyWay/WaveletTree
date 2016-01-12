@@ -20,12 +20,10 @@ void print1(std::vector<char> &v) {
 }
 
 void printTree(WaveletNode &node, int d) {
-  if (node == NULL) return;
+  if (node.isNull()) return;
   cout << d << ": ";
   print1(node.alphabet);
-  cout << endl << "l: ";
-  printTree(*(node.left), d+1);
-  cout << endl << "r: ";
-  printTree(*(node.right), d+1);
   cout << endl;
+  printTree(*(node.left), d+1);
+  printTree(*(node.right), d+1);
 }
