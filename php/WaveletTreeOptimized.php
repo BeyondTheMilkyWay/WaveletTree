@@ -192,6 +192,9 @@ class WaveletTree
 
     public function select($occurrenceNum, $letter)
     {
+        if($occurrenceNum < 0) {
+            return -1;
+        }
         $letterIndex = 0;
         foreach ($this->alphabet as $key => $value) {
             if ($key == $letter) {
@@ -439,8 +442,9 @@ if ($totalMemoryUsage < 1024) {
 
 
 foreach($waveletTree->getFinalAlphabet() as $key => $value) {
-    for($i=0; $i< 10;$i++) {
-        print "Select($i,$key) = ". $waveletTree->select($i,$key)."\n";
+    for($i=-1; $i< 10;$i++) {
+        $j=$i+1;
+        print "Select($j,$key) = ". $waveletTree->select($i,$key)."\n";
     }
 }
 
