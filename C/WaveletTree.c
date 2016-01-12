@@ -65,33 +65,43 @@ struct WaveletNode *allocateWaveletNode() {
     return node;
 }
 
-struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
+struct WaveletNode *addNode(char **complete_alphabet, char **node_chars,
                             int left, int right) {
+    printf("tu sam");
     struct WaveletNode *node = allocateWaveletNode();
+    printf("build bit vector");
+
     node->bit_vector = allocateBitVector(strlen(node_chars));
-    encodeToBitVector(node->bit_vector, node_chars, complete_alphabet, left, right);
+
+    printf("encode");
+    encodeToBitVector(node->bit_vector, *node_chars, *complete_alphabet, left, right);
+
+
+    printf("%d\n", (int) strlen(*complete_alphabet));
+    printf("tu");
+
 
     node->alphabet_start = left;
     node->alphabet_end = right;
 
     if (right - left == 1) {
         node->left_child = allocateWaveletNode();
-        node->left_child->letter = complete_alphabet[left];
+        node->left_child->letter = *complete_alphabet[left];
         node->left_child->parent = node;
 
         node->right_child = allocateWaveletNode();
-        node->right_child->letter = complete_alphabet[right];
+        node->right_child->letter = *complete_alphabet[right];
         node->right_child->parent = node;
     } else {
         int half = (right - left) / 2;
         int middle = left + half;
 
-        char *extracted_left = extractLettersByEncoding(node->bit_vector, node_chars, FALSE);
-        node->left_child = addNode(complete_alphabet, extracted_left, left, middle);
+        char *extracted_left = extractLettersByEncoding(node->bit_vector, *node_chars, FALSE);
+        node->left_child = addNode(complete_alphabet, &extracted_left, left, middle);
         node->left_child->parent = node;
 
-        char *extracted_right = extractLettersByEncoding(node->bit_vector, node_chars, TRUE);
-        node->right_child = addNode(complete_alphabet, extracted_right, middle, right);
+        char *extracted_right = extractLettersByEncoding(node->bit_vector, *node_chars, TRUE);
+        node->right_child = addNode(complete_alphabet, &extracted_right, middle, right);
         node->right_child->parent = node;
 
         free((void *) extracted_left);
@@ -101,9 +111,9 @@ struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
     return node;
 }
 
-struct WaveletTree *buildTree(char *input_str, char *complete_alphabet) {
+struct WaveletTree *buildTree(char **input_str, char **complete_alphabet) {
     struct WaveletTree *tree = (struct WaveletTree *) malloc(sizeof(struct WaveletTree));
-    tree->root = addNode(complete_alphabet, input_str, 0, (int) (strlen(complete_alphabet) - 1));
+    tree->root = addNode(complete_alphabet, input_str, 0, (int) (strlen(*complete_alphabet) - 1));
     tree->root->parent = NULL;
 
     return tree;

@@ -65,14 +65,14 @@ struct WaveletNode *allocateWaveletNode();
 /**
  * Returns pointer to a newly allocated Wavelet node with appropriate data.
  */
-struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
+struct WaveletNode *addNode(char **complete_alphabet, char **node_chars,
                             int left, int right);
 
 /**
  * Build an entire Wavelet tree structure according to
  * used alphabet and input stream.
  */
-struct WaveletTree *buildTree(char *input_str, char *complete_alphabet);
+struct WaveletTree *buildTree(char **input_str, char **complete_alphabet);
 
 /**
  * Recursive rank calculation helper function.

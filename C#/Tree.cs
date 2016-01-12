@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,6 @@ namespace BioInf_Dragicevic
         public Tree(string content)
         {
             root = buildTree(content, null);
-            List<Char> alphabet = new List<Char>();
             List<byte> bits = new List<byte>();
         }
         private Node buildTree(string content, Node parent)
@@ -21,6 +20,7 @@ namespace BioInf_Dragicevic
             Node currentNode = new Node();
             List<Char> alphabet = new List<Char>();
             List<byte> bits = new List<byte>();
+            //find alphabet
             for (int i = 0; i < content.Length; i++)
             {
                 if (!alphabet.Contains(content[i]))
@@ -30,6 +30,7 @@ namespace BioInf_Dragicevic
             }
             alphabet.Sort();
             int alphabetHalf = alphabet.Count / 2;
+            //add 0 and 1 values
             for (int i = 0; i < content.Length; i++)
             {
                if(alphabet.IndexOf(content[i]) < alphabetHalf) {
@@ -40,31 +41,34 @@ namespace BioInf_Dragicevic
                    bits.Add(1);
                }
             }
+            //set variables to current node
             currentNode.valuesList = bits;
             currentNode.alphabet = alphabet;
             currentNode.parent = parent;
+            //build children
             if (!(alphabet.Count <= 2))
             {
-                string childZeroContent = "";
-                string childOneContent = "";
+                StringBuilder childZeroContent = new StringBuilder();
+                StringBuilder childOneContent = new StringBuilder();
                 for (int i = 0; i < content.Length; i++)
                 {
                     char tempChar = content[i];
                     byte tempValue = bits[i];
                     if (tempValue == 0)
                     {
-                        childZeroContent += tempChar;
+                        childZeroContent.Append(tempChar);
                     }
                     else
                     {
-                        childOneContent += tempChar;
+                        childOneContent.Append(tempChar);
                     }
                 }
-                currentNode.childZero = buildTree(childZeroContent, currentNode);
-                currentNode.childOne = buildTree(childOneContent, currentNode);
+                currentNode.childZero = buildTree(childZeroContent.ToString(), currentNode);
+                currentNode.childOne = buildTree(childOneContent.ToString(), currentNode);
             }
             return currentNode;
         }
+        
         public int rank(int count, char symbol) {
             return root.getRank(count+1, symbol);
         }

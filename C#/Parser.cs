@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace BioInf_Dragicevic
     {
         public static string readFasta(string fileName)
         {
-            string fileContent = "";
+            StringBuilder fileContent = new StringBuilder();
             string line;
             // Read the file and display it line by line.
             System.IO.StreamReader file =
@@ -21,11 +21,10 @@ namespace BioInf_Dragicevic
                 {
                     continue;
                 }
-                fileContent += line;
+                fileContent.Append(line);
             }
-
             file.Close();
-            return fileContent;
+            return fileContent.ToString();
         }
     }
 }
