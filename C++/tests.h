@@ -6,5 +6,6 @@
 #define WAVELETTREE_TESTS_H
 
 void test1(std::string &str);
+void test_rank(std::string &str, char q, int x);
 
 #endif //WAVELETTREE_TESTS_H

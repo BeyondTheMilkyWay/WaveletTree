@@ -58,7 +58,6 @@ void convertString(std::string &str) {
 
 void WaveletTree::build(std::string &str) {
   // extract and sort alphabet
-  std::cout<<"build"<<std::endl;
   convertString(str);
   std::set<char> chars;
   for (char c : str) {
@@ -75,7 +74,14 @@ void WaveletTree::build(std::string &str) {
 }
 
 int WaveletTree::rank(char q, int x) {
-    return 0;
+  WaveletNodeP node = root;
+  int rank = x;
+  while (!node->isNull()) {
+    bool b = node->bitcode(q);
+    rank = node->binary_rank(b, rank);
+    node = b ? node->right : node->left;
+  }
+  return rank;
 }
 
 int WaveletTree::select(char q, int x) {

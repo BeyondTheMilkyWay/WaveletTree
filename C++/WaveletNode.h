@@ -31,6 +31,10 @@ public:
       unsigned long size = alphabet.size();
       return pos >= size / 2;
     }
+
+    bool bitcode(char q) {
+      return WaveletNode::bitcode(this->alphabet, q);
+    }
 };
 
 typedef std::shared_ptr<WaveletNode> WaveletNodeP;

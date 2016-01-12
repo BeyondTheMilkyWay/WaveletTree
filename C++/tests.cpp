@@ -28,3 +28,8 @@ void test1(std::string &str) {
   std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
   printTree(*(tree->getRoot()), 0);
 }
+
+void test_rank(std::string &str, char q, int x) {
+  std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
+  cout << "Rank: " << tree->rank(q, x) << endl;
+}
