@@ -35,8 +35,9 @@ public class WaveletTree {
 		for (byte l : sequence) {
 			seq.add(l);
 		}
-
+		
 		this.alphabet = getDistinct(seq);
+		System.out.println(Arrays.toString(this.alphabet));
 		this.rootNode = new WaveletNode(seq.size(), (byte) 0,
 				(byte) (this.alphabet.length - 1));
 
@@ -177,10 +178,11 @@ public class WaveletTree {
 				currNode = currNode.getLeftChild();
 			} else {
 				if (currNode.getRightChild() == null) break;
-				letterIndex -= alphHalf;
+				//letterIndex -= alphHalf;
 				currNode = currNode.getRightChild();
 			}
 		}
+		
 
 		// call recursive method
 		return select(currNode, letter, occurrenceNum, alphabet);
@@ -212,7 +214,7 @@ public class WaveletTree {
 		// <code>occurranceNum</code> bits of type <code>bitType</code>
 		int index = node.calcOccurrenceArrayLength(bitType, occurrenceNum + 1);
 
-		if (node.getParent() == null) {// if parent return result
+		if (node.getParent() == null) {// if root return result
 			return index;
 		} else {// else ask parent
 			return select(node.getParent(), letter, index, alphabet);
