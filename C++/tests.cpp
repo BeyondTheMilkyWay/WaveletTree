@@ -24,7 +24,7 @@ void printTree(WaveletNode &node, int d) {
   printTree(*(node.right), d+1);
 }
 
-void test1(std::string &str) {
+void test_build(std::string &str) {
   std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
   printTree(*(tree->getRoot()), 0);
 }
@@ -32,4 +32,9 @@ void test1(std::string &str) {
 void test_rank(std::string &str, char q, int x) {
   std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
   cout << "Rank: " << tree->rank(q, x) << endl;
+}
+
+void test_select(std::string &str, char q, int x) {
+  std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
+  cout << "Select: " << tree->select(q, x) << endl;
 }

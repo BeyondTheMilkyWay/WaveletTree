@@ -11,3 +11,17 @@ int WaveletNode::binary_rank(bool q, int x) {
   }
   return sum;
 }
+
+
+int WaveletNode::binary_select(bool q, int x) {
+  int cnt = x + 1;
+  int index = 0;
+  while (cnt > 0) {
+    bool val = bitArray.get(index);
+    if (q == val) {
+      cnt--;
+    }
+    index++;
+  }
+  return index - 1;
+}

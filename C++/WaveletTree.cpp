@@ -71,6 +71,7 @@ void WaveletTree::build(std::string &str) {
 
   // build tree
   this->root = build2(str, alphabet);
+  this->root->setRoot(true);
 }
 
 int WaveletTree::rank(char q, int x) {
@@ -85,7 +86,22 @@ int WaveletTree::rank(char q, int x) {
 }
 
 int WaveletTree::select(char q, int x) {
-    return 0;
+  // go down
+  WaveletNodeP node = root;
+  while (!node->isNull()) {
+    bool b = node->bitcode(q);
+    node = b ? node->right : node->left;
+  }
+
+  // go up
+  int i = x;
+  while (!node->isRoot()) {
+    auto parent = node->parent.lock();
+    bool b = parent->bitcode(q);
+    i = parent->binary_select(b, i);
+    node = parent;
+  }
+  return i;
 }
 
 char WaveletTree::access(int x) {

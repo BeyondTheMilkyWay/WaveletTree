@@ -5,7 +5,8 @@
 #ifndef WAVELETTREE_TESTS_H
 #define WAVELETTREE_TESTS_H
 
-void test1(std::string &str);
+void test_build(std::string &str);
 void test_rank(std::string &str, char q, int x);
+void test_select(std::string &str, char q, int x);
 
 #endif //WAVELETTREE_TESTS_H
