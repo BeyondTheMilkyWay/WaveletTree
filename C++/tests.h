@@ -8,5 +8,6 @@
 void test_build(std::string &str);
 void test_rank(std::string &str, char q, int x);
 void test_select(std::string &str, char q, int x);
+void test_access(std::string &str, int x);
 
 #endif //WAVELETTREE_TESTS_H

@@ -38,3 +38,8 @@ void test_select(std::string &str, char q, int x) {
   std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
   cout << "Select: " << tree->select(q, x) << endl;
 }
+
+void test_access(std::string &str, int x) {
+  std::shared_ptr<WaveletTree> tree = std::make_shared<WaveletTree>(str);
+  cout << "Access: " << tree->access(x) << endl;
+}

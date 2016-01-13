@@ -30,5 +30,17 @@ int main() {
   test_select(longStr2, 'e', 5);
   std::string exampleStr5(exampleArr);
   test_select(exampleStr5, 'h', 7);
+
+  // access
+  std::string exampleStr6(exampleArr);
+  test_access(exampleStr6, 2);
+  std::string exampleStr7(exampleArr);
+  test_access(exampleStr7, 0);
+  std::string longStr3(longArr);
+  test_access(longStr3, 17);
+  std::string exampleStr8(exampleArr);
+  test_access(exampleStr8, 7);
+  std::string exampleStr9(exampleArr);
+  test_access(exampleStr9, 17);
   return 0;
 }

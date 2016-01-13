@@ -108,5 +108,16 @@ int WaveletTree::select(char q, int x) {
 }
 
 char WaveletTree::access(int x) {
-    return 0;
+  auto node = this->root;
+  int pos = x;
+  while (!node->isNull()) {
+    if (pos >= node->bitArray.size()) {
+      return '?';
+    }
+    bool b = node->bitArray.get(pos);
+    int rank = node->binary_rank(b, pos+1);
+    pos = rank - 1;
+    node = b ? node->right : node->left;
+  }
+  return node->alphabet[0];
 }
