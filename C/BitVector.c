@@ -3,16 +3,18 @@
 //
 #include "BitVector.h"
 
-struct BitVector *allocateBitVector(size_t num_of_chars) {
-    int calc_num = (int) (num_of_chars / 8);
+struct BitVector *allocateBitVector(int num_of_chars) {
+    int calc_num = num_of_chars / 8;
 
     if (calc_num == 0) {
         calc_num = 1;
+    } else if (num_of_chars % 8 > 0) {
+        ++calc_num;
     }
 
     struct BitVector *bit_vector = (struct BitVector *) malloc(sizeof(struct BitVector));
     bit_vector->bits = (char *) malloc(calc_num * sizeof(char));
-    bit_vector->size = (int) num_of_chars;
+    bit_vector->size = num_of_chars;
 
     return bit_vector;
 }
@@ -35,7 +37,7 @@ bool bitVecGetOnPosition(struct BitVector *bit_vector, int index) {
     return (bit_vector->bits[array_index] >> (7 - bit_index)) & 1;
 }
 
-char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, bool value) {
+char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, bool value, int *length) {
     int num_of_selected = 0;
 
     for (int i = 0; i < bit_vector->size; ++i) {
@@ -54,6 +56,7 @@ char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, b
     }
 
     selected[num_of_selected] = '\0';
+    *length = num_of_selected;
 
     return selected;
 }

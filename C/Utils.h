@@ -40,6 +40,21 @@ char *extractAlphabetLetters(char *input_chars);
 /**
  * Reads input file and extracts alphabet letters.
  */
-void getAlphabetFromFile(const char *file_name, char **alphabet, char **input);
+void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, int *input_len, int *alphabet_len);
+
+/**
+ * Prints new message to stdout.
+ */
+void logln(char *msg);
+
+
+/**
+ * These two functions are used for retrieving
+ * memory usage of current process.
+ * The result is given in KB.
+ */
+int parseLine(char *line);
+int getValue(); //Note: this value is in KB!
+
 
 #endif //C_UTILS_H

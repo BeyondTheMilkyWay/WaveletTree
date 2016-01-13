@@ -15,10 +15,6 @@ import java.util.TreeSet;
 public class WaveletTree {
 
 	/**
-	 * Tree depth.
-	 */
-	private int treeDepth;
-	/**
 	 * Root node of the tree.
 	 */
 	private WaveletNode rootNode;
@@ -36,13 +32,12 @@ public class WaveletTree {
 	public WaveletTree(byte[] sequence) {
 		// convert sequence to list
 		List<Byte> seq = new ArrayList<>();
-		for (byte l : sequence)
+		for (byte l : sequence) {
 			seq.add(l);
-
+		}
+		
 		this.alphabet = getDistinct(seq);
-		this.treeDepth = (int) Math.ceil(Math.log(this.alphabet.length)
-				/ Math.log(2));
-		this.rootNode = new WaveletNode(sequence.length, (byte) 0,
+		this.rootNode = new WaveletNode(seq.size(), (byte) 0,
 				(byte) (this.alphabet.length - 1));
 
 		// build tree
@@ -172,21 +167,23 @@ public class WaveletTree {
 		WaveletNode currNode = this.rootNode;
 
 		// find starting point node
-		for (int i = 1; i < this.treeDepth; i++) {
+		while (true) {
 			byte alphSize = (byte) (currNode.getEndAlphabetIndex()
 					- currNode.getStartAlphabetIndex() + 1);
 			byte alphHalf = (byte) (currNode.getStartAlphabetIndex() + alphSize / 2);
 
 			if (alphHalf > letterIndex) {
+				if (currNode.getLeftChild() == null) break;
 				currNode = currNode.getLeftChild();
 			} else {
-				letterIndex -= alphHalf;
+				if (currNode.getRightChild() == null) break;
 				currNode = currNode.getRightChild();
 			}
 		}
+		
 
 		// call recursive method
-		return select(currNode, letter, occurrenceNum, alphabet);
+		return select(currNode, letter, occurrenceNum - 1, alphabet);
 	}
 
 	/**
@@ -215,7 +212,7 @@ public class WaveletTree {
 		// <code>occurranceNum</code> bits of type <code>bitType</code>
 		int index = node.calcOccurrenceArrayLength(bitType, occurrenceNum + 1);
 
-		if (node.getParent() == null) {// if parent return result
+		if (node.getParent() == null) {// if root return result
 			return index;
 		} else {// else ask parent
 			return select(node.getParent(), letter, index, alphabet);
@@ -333,7 +330,7 @@ public class WaveletTree {
 	}
 
 	/**
-	 * Calculates memory usage.
+	 * Calculate memory usage.
 	 * 
 	 * @return memory usage.
 	 */

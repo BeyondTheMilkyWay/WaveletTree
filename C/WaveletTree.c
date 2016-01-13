@@ -4,11 +4,24 @@
 
 #include "WaveletTree.h"
 
+void checkIfLetterAllowed(char letter, char *alphabet, int alphabet_len) {
+    bool allowed = FALSE;
+    for(int i=0;i< alphabet_len;++i) {
+        if (alphabet[i] == letter) {
+            allowed = TRUE;
+        }
+    }
+
+    if (allowed == FALSE) {
+        error("Letter not in alphabet!");
+    }
+}
+
 bool isLeafNode(struct WaveletNode *node) {
-    if (node->letter == '\0') {
-        return FALSE;
-    } else {
+    if (node->letter != '\0') {
         return TRUE;
+    } else {
+        return FALSE;
     }
 }
 
@@ -32,28 +45,24 @@ void deleteTree(struct WaveletTree *tree) {
 
 bool getEncodingType(char *complete_alphabet, char letter,
                      int left, int right) {
-    int half = (right - left) / 2;
-
-    int index = 0;
-    while (letter != complete_alphabet[left + index]) {
-        ++index;
-    }
-
-    return (index <= half) ? FALSE : TRUE;
+    int half = (right - left) / 2 +  left;
+	return letter <= complete_alphabet[half] ? FALSE : TRUE;
 }
 
 // expects bit_vector to be defined
 void encodeToBitVector(struct BitVector *bit_vector, char *data_str_part,
-                       char *complete_alphabet, int left, int right) {
+                       char *complete_alphabet, int data_str_len, int left, int right) {
     if (bit_vector == NULL) {
         error("BitVector must be defined before encoding.");
     }
 
-    for (int i = 0; i < strlen(data_str_part); ++i) {
+	int half = (right - left) / 2 + left;
+    for (int i = 0; i < data_str_len; ++i) {
         char letter = data_str_part[i];
 
         // find if letter on [i] should be 0 or 1 encoded
-        bool encoding_value = getEncodingType(complete_alphabet, letter, left, right);
+		bool encoding_value = letter <= complete_alphabet[half] ? FALSE : TRUE;
+							
         bitVecSetOnPosition(bit_vector, i, encoding_value);
     }
 }
@@ -65,33 +74,41 @@ struct WaveletNode *allocateWaveletNode() {
     return node;
 }
 
-struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
-                            int left, int right) {
+struct WaveletNode *addNode(char *complete_alphabet, char *node_chars, int input_len, int left, int right) {
     struct WaveletNode *node = allocateWaveletNode();
-    node->bit_vector = allocateBitVector(strlen(node_chars));
-    encodeToBitVector(node->bit_vector, node_chars, complete_alphabet, left, right);
+    node->bit_vector = allocateBitVector(input_len);
+    encodeToBitVector(node->bit_vector, node_chars, complete_alphabet, input_len, left, right);
 
     node->alphabet_start = left;
     node->alphabet_end = right;
 
-    if (right - left == 1) {
-        node->left_child = allocateWaveletNode();
-        node->left_child->letter = complete_alphabet[left];
-        node->left_child->parent = node;
+    if (right - left == 0) {
+        // node contains only one type of character
+        // it must be a leaf node
+        node->letter = complete_alphabet[left];
+	}
+	else if (right - left == 1) {
+        // node with two characters in alphabet
+        // has two leafs
+		node->left_child = allocateWaveletNode();
+		node->left_child->letter = complete_alphabet[left];
+		node->left_child->parent = node;
 
-        node->right_child = allocateWaveletNode();
-        node->right_child->letter = complete_alphabet[right];
-        node->right_child->parent = node;
-    } else {
+		node->right_child = allocateWaveletNode();
+		node->right_child->letter = complete_alphabet[right];
+		node->right_child->parent = node;
+	}
+	else {
         int half = (right - left) / 2;
         int middle = left + half;
 
-        char *extracted_left = extractLettersByEncoding(node->bit_vector, node_chars, FALSE);
-        node->left_child = addNode(complete_alphabet, extracted_left, left, middle);
+		int length = 0;
+        char *extracted_left = extractLettersByEncoding(node->bit_vector, node_chars, FALSE, &length);
+        node->left_child = addNode(complete_alphabet, extracted_left,length, left, middle);
         node->left_child->parent = node;
 
-        char *extracted_right = extractLettersByEncoding(node->bit_vector, node_chars, TRUE);
-        node->right_child = addNode(complete_alphabet, extracted_right, middle, right);
+        char *extracted_right = extractLettersByEncoding(node->bit_vector, node_chars, TRUE, &length);
+        node->right_child = addNode(complete_alphabet, extracted_right, length, middle + 1, right);
         node->right_child->parent = node;
 
         free((void *) extracted_left);
@@ -101,9 +118,9 @@ struct WaveletNode *addNode(char *complete_alphabet, char *node_chars,
     return node;
 }
 
-struct WaveletTree *buildTree(char *input_str, char *complete_alphabet) {
+struct WaveletTree *buildTree(char *input_str, int input_len, char *complete_alphabet, int alphabet_len) {
     struct WaveletTree *tree = (struct WaveletTree *) malloc(sizeof(struct WaveletTree));
-    tree->root = addNode(complete_alphabet, input_str, 0, (int) (strlen(complete_alphabet) - 1));
+    tree->root = addNode(complete_alphabet, input_str, input_len, 0, alphabet_len - 1);
     tree->root->parent = NULL;
 
     return tree;
@@ -117,7 +134,8 @@ int rankRec(struct WaveletNode *node, char *complete_alphabet,
     // calc num of times the encoding appears up to 'position'
     int freq = getOccurrenceCount(node->bit_vector, position, encoding);
 
-    if (isLeafNode(node->left_child) || isLeafNode(node->right_child)) {
+    if ((encoding == FALSE && isLeafNode(node->left_child)) ||
+            (encoding == TRUE && isLeafNode(node->right_child))) {
         return freq;
     }
 
@@ -130,8 +148,19 @@ int rankRec(struct WaveletNode *node, char *complete_alphabet,
 
 int rankOp(struct WaveletTree *tree, char *complete_alphabet,
            int position, char letter) {
+    checkIfLetterAllowed(letter, complete_alphabet, (int) strlen(complete_alphabet));
     struct WaveletNode *root = tree->root;
-    return rankRec(root, complete_alphabet, letter, position + 1);
+
+    // for root node we take position + 1
+    bool encoding = getEncodingType(complete_alphabet, letter, root->alphabet_start, root->alphabet_end);
+
+    // calc num of times the encoding appears up to 'position'
+    int freq = getOccurrenceCount(root->bit_vector, position + 1, encoding);
+    if (encoding == FALSE) {
+        return rankRec(root->left_child, complete_alphabet, letter, freq);
+    } else {
+        return rankRec(root->right_child, complete_alphabet, letter, freq);
+    }
 }
 
 char accessRec(struct WaveletNode *node, char *complete_alphabet, int position) {
@@ -161,6 +190,7 @@ char accessOp(struct WaveletTree *tree, char *complete_alphabet, int position) {
 
 int selectRec(struct WaveletNode *node, char *complete_alphabet,
               char letter, int nth_occurrence) {
+    checkIfLetterAllowed(letter, complete_alphabet, (int) strlen(complete_alphabet));
     bool encoding = getEncodingType(complete_alphabet, letter, node->alphabet_start, node->alphabet_end);
     int position = calcNthOccurrence(node->bit_vector, nth_occurrence, encoding);
 

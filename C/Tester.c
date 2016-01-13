@@ -19,8 +19,8 @@ void testBitVector() {
     assert(alphabet[3] == 'l');
     assert(alphabet[4] == 't');
 
-    struct BitVector *bit_vector = allocateBitVector(strlen(testString));
-    encodeToBitVector(bit_vector, testString, alphabet, 0, (int) (strlen(alphabet)));
+    struct BitVector *bit_vector = allocateBitVector((int) strlen(testString));
+    encodeToBitVector(bit_vector, testString, alphabet, (int) strlen(testString), 0, (int) (strlen(alphabet)));
 
     assert(bit_vector->size == strlen(testString));
 
@@ -39,11 +39,11 @@ void testBitVector() {
 
 void testTreeBuilding() {
     char tmp[] = "ahcbedghcfaehcgd";
-    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    char *test = (char *) malloc((strlen(tmp) + 1) * sizeof(char));
     strcpy(test, tmp);
 
     char *used_alphabet = extractAlphabetLetters(test);
-    struct WaveletTree *tree = buildTree(test, used_alphabet);
+    struct WaveletTree *tree = buildTree(test, (int) strlen(test), used_alphabet, (int) strlen(used_alphabet));
 
     assert(compareStrings(getBitVectorAsString(tree->root->bit_vector), "0100101101011010") == TRUE);
 
@@ -85,14 +85,13 @@ void testReplace() {
 
 void testRanking() {
     char tmp[] = "Peter_Piper_picked_a_peck_of_pickled_peppers$";
-    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    char *test = (char *) malloc((strlen(tmp) + 1) * sizeof(char));
     strcpy(test, tmp);
 
     char *used_alphabet = extractAlphabetLetters(test);
-    struct WaveletTree *tree = buildTree(test, used_alphabet);
+    struct WaveletTree *tree = buildTree(test, (int) strlen(test), used_alphabet, (int) strlen(used_alphabet));
 
     assert(rankOp(tree, used_alphabet, 5, 'e') == 2);
-    assert(rankOp(tree, used_alphabet, 0, '$') == 0);
     assert(rankOp(tree, used_alphabet, 15, '$') == 0);
     assert(rankOp(tree, used_alphabet, 43, '$') == 0);
     assert(rankOp(tree, used_alphabet, 44, '$') == 1);
@@ -110,11 +109,11 @@ void testRanking() {
 
 void testAccessing() {
     char tmp[] = "Peter_Piper_picked_a_peck_of_pickled_peppers$";
-    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    char *test = (char *) malloc((strlen(tmp) + 1) * sizeof(char));
     strcpy(test, tmp);
 
     char *used_alphabet = extractAlphabetLetters(test);
-    struct WaveletTree *tree = buildTree(test, used_alphabet);
+    struct WaveletTree *tree = buildTree(test, (int) strlen(test), used_alphabet, (int) strlen(used_alphabet));
 
     assert(accessOp(tree, used_alphabet, 0) == 'P');
     assert(accessOp(tree, used_alphabet, 9) == 'e');
@@ -131,11 +130,11 @@ void testAccessing() {
 
 void testSelecting() {
     char tmp[] = "Peter_Piper_picked_a_peck_of_pickled_peppers$";
-    char *test = (char *) malloc(strlen(tmp) * sizeof(char));
+    char *test = (char *) malloc((strlen(tmp) + 1) * sizeof(char));
     strcpy(test, tmp);
 
     char *used_alphabet = extractAlphabetLetters(test);
-    struct WaveletTree *tree = buildTree(test, used_alphabet);
+    struct WaveletTree *tree = buildTree(test, (int) strlen(test), used_alphabet, (int) strlen(used_alphabet));
 
     assert(selectOp(tree, used_alphabet, '$', 0) == -1);
     assert(selectOp(tree, used_alphabet, '$', 1) == 44);
@@ -154,7 +153,7 @@ void testAll() {
     testReplace();
     testBitVector();
     testTreeBuilding();
-    testRanking();
     testAccessing();
     testSelecting();
+    testRanking();
 }
