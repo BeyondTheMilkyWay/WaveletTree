@@ -28,5 +28,7 @@ int main() {
   test_select(exampleStr4, 'h', 2);
   std::string longStr2(longArr);
   test_select(longStr2, 'e', 5);
+  std::string exampleStr5(exampleArr);
+  test_select(exampleStr5, 'h', 7);
   return 0;
 }

@@ -22,6 +22,7 @@ public:
 
     bool get(int i);
     void set(int i, char value);
+    int size();
 
     std::string toString();
 };

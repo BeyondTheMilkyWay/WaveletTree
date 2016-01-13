@@ -17,6 +17,9 @@ int WaveletNode::binary_select(bool q, int x) {
   int cnt = x + 1;
   int index = 0;
   while (cnt > 0) {
+    if (index >= bitArray.size()) {
+      return -1;
+    }
     bool val = bitArray.get(index);
     if (q == val) {
       cnt--;

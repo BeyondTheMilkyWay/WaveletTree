@@ -99,6 +99,9 @@ int WaveletTree::select(char q, int x) {
     auto parent = node->parent.lock();
     bool b = parent->bitcode(q);
     i = parent->binary_select(b, i);
+    if (i < 0) {
+      return -1;
+    }
     node = parent;
   }
   return i;

@@ -20,3 +20,7 @@ std::string BitArray::toString() {
   }
   return str;
 }
+
+int BitArray::size() {
+  return arr.size();
+}
