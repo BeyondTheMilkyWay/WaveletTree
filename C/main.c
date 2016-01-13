@@ -8,10 +8,34 @@
 #include "Timer.h"
 
 
-
-void logn(char* msg)
-{
+void logln(char *msg) {
     printf("|%s\n", msg);
+}
+
+
+int parseLine(char *line) {
+    int i = (int) strlen(line);
+    while (*line < '0' || *line > '9') line++;
+    line[i - 3] = '\0';
+    i = atoi(line);
+    return i;
+}
+
+
+int getValue() { //Note: this value is in KB!
+    FILE *file = fopen("/proc/self/status", "r");
+    int result = -1;
+    char line[128];
+
+
+    while (fgets(line, 128, file) != NULL) {
+        if (strncmp(line, "VmSize:", 7) == 0) {
+            result = parseLine(line);
+            break;
+        }
+    }
+    fclose(file);
+    return result;
 }
 
 /**
@@ -39,41 +63,41 @@ int main(int argc, char *argv[]) {
         char *input;
         char *used_alphabet;
 
-        logn("Reading input data...");
-        getAlphabetFromFile(file_name, &used_alphabet, &input);
+        logln("Reading input data...");
+        int input_len;
+        int alphabet_len;
 
+        getAlphabetFromFile(file_name, &used_alphabet, &input, &input_len, &alphabet_len);
 
-        printf("%d", (int) strlen(input));
-        printf("ne radi\n");
-        printf("%d", (int) strlen(used_alphabet));
+        logln("Building tree...");
 
-        logn("Building wavelet tree...");
         timerStart();
-        struct WaveletTree *tree = buildTree(&input, &used_alphabet);
+        struct WaveletTree *tree = buildTree(input, input_len, used_alphabet, alphabet_len);
         timerStop();
-        printf("Execution time [build]: %f ms\n", timerGetTimeSpan());
 
+        printf("|Memory in use: %d MB\n", getValue()/ 1024);
+
+        printf("|Execution time [tree building]: %f ms\n", timerGetTimeSpan());
+
+        timerStart();
         char *query = argv[2];
-        char *result = (char *) malloc(25 * sizeof(char));
+        char *result = (char *) malloc(100 * sizeof(char));
         if (strcmp(query, "access") == 0) {
             int index = atoi(argv[3]);
-            timerStart();
             char access = accessOp(tree, used_alphabet, index);
-            timerStop();
 
-            printf("Execution time: %f ms\n", timerGetTimeSpan());
             snprintf(result, 25, "access(%d) = %c", index, access);
             printf("|access(%d) = %c\n", index, access);
         } else if (strcmp(query, "rank") == 0) {
-            int index = atoi(argv[3]);
             char *character = argv[4];
-            int rank = rankOp(tree, used_alphabet, index, *character);
+            int index = atoi(argv[3]);
 
+            int rank = rankOp(tree, used_alphabet, index, *character);
             snprintf(result, 25, "rank(%d, %c) = %d", index, *character, rank);
             printf("|rank(%d, %c) = %d\n", index, *character, rank);
         } else if (strcmp(query, "select") == 0) {
-            int index = atoi(argv[3]);
             char *character = argv[4];
+            int index = atoi(argv[3]);
             int select = selectOp(tree, used_alphabet, *character, index);
 
             snprintf(result, 25, "select(%d, %c) = %d", index, *character, select);
@@ -82,7 +106,12 @@ int main(int argc, char *argv[]) {
             error("Unknown query given.");
         }
 
-        char *result_file_name = query;
+        timerStop();
+
+        printf("|Execution time [%s]: %f ms\n", query, timerGetTimeSpan());
+
+        char *result_file_name = (char *) malloc(strlen(query + 1) * sizeof(char));
+        strcpy(result_file_name, query);
         strcat(result_file_name, "-res.txt");
 
         FILE *file = fopen(result_file_name, "w");
@@ -90,6 +119,7 @@ int main(int argc, char *argv[]) {
 
         printf("|Result written to file: %s\n", result_file_name);
 
+        free(result_file_name);
         free((void *) used_alphabet);
         free((void *) result);
         free((void *) input);
@@ -99,3 +129,5 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+

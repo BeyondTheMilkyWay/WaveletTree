@@ -55,7 +55,7 @@ bool getEncodingType(char *complete_alphabet, char letter,
  * and the used alphabet.
  */
 void encodeToBitVector(struct BitVector *bit_vector, char *data_str_part,
-                       char *complete_alphabet, int left, int right);
+	char *complete_alphabet, int data_str_len, int left, int right);
 
 /**
  * Returns pointer to newly allocated Wavelet node.
@@ -65,14 +65,13 @@ struct WaveletNode *allocateWaveletNode();
 /**
  * Returns pointer to a newly allocated Wavelet node with appropriate data.
  */
-struct WaveletNode *addNode(char **complete_alphabet, char **node_chars,
-                            int left, int right);
+struct WaveletNode *addNode(char *complete_alphabet, char *node_chars, int input_len, int left, int right);
 
 /**
  * Build an entire Wavelet tree structure according to
  * used alphabet and input stream.
  */
-struct WaveletTree *buildTree(char **input_str, char **complete_alphabet);
+struct WaveletTree *buildTree(char *input_str, int input_len, char *complete_alphabet, int alphabet_len);
 
 /**
  * Recursive rank calculation helper function.

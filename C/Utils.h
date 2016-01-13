@@ -40,6 +40,6 @@ char *extractAlphabetLetters(char *input_chars);
 /**
  * Reads input file and extracts alphabet letters.
  */
-void getAlphabetFromFile(const char *file_name, char **alphabet, char **input);
+void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, int *input_len, int *alphabet_len);
 
 #endif //C_UTILS_H

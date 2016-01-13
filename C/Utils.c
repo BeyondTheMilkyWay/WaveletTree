@@ -39,7 +39,7 @@ char *replaceSpaces(char *data) {
 }
 
 bool startsWith(const char *pre, const char *str) {
-    return strncmp(pre, str, strlen(pre)) == 0;
+    return strncmp(pre, str, 1) == 0;
 }
 
 int compare(const void *a, const void *b) {
@@ -66,7 +66,7 @@ char *extractAlphabetLetters(char *input_chars) {
     }
 
     // finally collect letters
-    char *alphabet = (char *) malloc(alphabet_size * sizeof(char));
+    char *alphabet = (char *) malloc((alphabet_size + 1) * sizeof(char));
     int index = 0;
     for (int i = 0; i < 256; ++i) {
         if (letters[i] == TRUE) {
@@ -84,7 +84,7 @@ char *extractAlphabetLetters(char *input_chars) {
 /**
  * Gets the used alphabet in ascending order from given file
  */
-void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
+void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, int *input_len, int *alphabet_len) {
     FILE *file = fopen(file_name, "r");
     if (file == NULL) {
         error("Error while opening file.");
@@ -95,30 +95,59 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
     long int total_size = ftell(file);
     fseek(file, 0L, SEEK_SET);
 
-    char *all_lines = (char *) malloc(total_size * sizeof(char));
+    char *all_lines = (char *) malloc((total_size + 1) * sizeof(char));
+    fread(all_lines, (size_t) total_size, 1, file);
+    all_lines[total_size] = '\0';
 
+    int num_of_nl = 0;
+    int first_nl_index = 0;
 
-    bool letters[256] = {0};
+    //remove first line if starts with '>'
+    if (startsWith(">", all_lines)) {
+        // find index of first newline
+        while (all_lines[first_nl_index++] != '\n');
 
+        // remove first line
+        for (int i = 0; i < total_size; ++i) {
+            if (all_lines[i + first_nl_index] == '\n') {
+                ++num_of_nl;
+            }
 
-    char line[100000];
-    long int real_len = 0;
-    while (fgets(line, sizeof(line), file)) {
-        if (startsWith(">", strtok(line, "\n"))) {
-            continue;
-        }
-
-        real_len += strlen(line);
-        replaceSpaces(line);
-        strcat(all_lines, line);
-
-        for (int i=0; i< strlen(line);++i)
-        {
-            int index = line[i];
-            letters[index] = TRUE;
+            all_lines[i] = all_lines[i + first_nl_index];
         }
     }
 
+    int new_size = (int) (total_size - first_nl_index - num_of_nl);
+    char *final_input = (char *) malloc((new_size + 2) * sizeof(char));
+    final_input[new_size] = '\0';
+
+
+    // extract used alphabet
+    // remove newlines and replace spaces
+    bool letters[256] = {0};
+
+    if (num_of_nl == 0) {
+        strcpy(final_input, all_lines);
+        for (int i = 0; i < new_size; ++i) {
+            letters[final_input[i]] = TRUE;
+        }
+    } else {
+        // remove all newlines
+        for (int i = 0, j = 0; j < new_size; ++i) {
+            if (all_lines[i] != '\n') {
+                final_input[j] = all_lines[i];
+                letters[final_input[j]] = TRUE;
+                ++j;
+            }
+        }
+    }
+
+    replaceSpaces(final_input);
+    final_input[new_size] = '$';
+    final_input[new_size + 1] = '\0';
+    *input_len = new_size + 1;
+
+    free((void *) all_lines);
     fclose(file);
 
     int alphabet_size = 0;
@@ -129,7 +158,7 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
     }
 
     // finally collect letters
-    char *tmp_alphabet = (char *) malloc(alphabet_size * sizeof(char));
+    char *tmp_alphabet = (char *) malloc((alphabet_size + 2) * sizeof(char));
     int index = 0;
     for (int i = 0; i < 256; ++i) {
         if (letters[i] == TRUE) {
@@ -138,16 +167,11 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input) {
         }
     }
 
-    tmp_alphabet[alphabet_size] = '\0';
-    qsort(tmp_alphabet, strlen(tmp_alphabet), 1, compare);
+    tmp_alphabet[alphabet_size] = '$';
+    tmp_alphabet[alphabet_size + 1] = '\0';
+    *alphabet_len = (int) strlen(tmp_alphabet);
+    qsort(tmp_alphabet, (size_t) *alphabet_len, 1, compare);
 
-    printf("%s\n", tmp_alphabet);
-
-    // do reallocation to skip all new_lines
-    all_lines = realloc(all_lines, (real_len + 1) * sizeof(char));
-    all_lines[real_len] = '$';
-
-    *input = all_lines;
+    *input = final_input;
     *alphabet = tmp_alphabet;
-//    *alphabet = extractAlphabetLetters(all_lines);
 }

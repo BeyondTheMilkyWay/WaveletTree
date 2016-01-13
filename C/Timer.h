@@ -8,11 +8,9 @@
 #include <time.h>
 #include <sys/time.h>
 
-clock_t start;
-clock_t end;
-
 struct timeval t0;
 struct timeval t1;
+
 
 void timerStart();
 

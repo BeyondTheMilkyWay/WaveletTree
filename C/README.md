@@ -10,9 +10,14 @@ This project includes following implementations:
  - access function
  - basic unit tests
 
+For code documentation please see all header (.h) files.
 
 ### How to compile
- Prepare for compilation by typing:
+In order to compile and run the program, you must have cmake and make commands available on your system.
+If you are using a linux distribution, you most likely already have both installed.
+Otherwise please install first.
+
+Prepare for compilation by typing:
 
     $ cmake CMakeLists.txt
 then comile with following command:
