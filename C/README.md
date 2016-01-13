@@ -35,6 +35,7 @@ Following arguments are supported:
 - `<input-file-path> access <index>`
 - `<input-file-path> rank <character> <index>`
 - `<input-file-path> select <character> <index>`
+- `batchtest <input-file-path> <output-file> <num-of-runs>`
 
 ### Authors
 

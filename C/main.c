@@ -6,37 +6,7 @@
 #include "WaveletTree.h"
 #include "Tester.h"
 #include "Timer.h"
-
-
-void logln(char *msg) {
-    printf("|%s\n", msg);
-}
-
-
-int parseLine(char *line) {
-    int i = (int) strlen(line);
-    while (*line < '0' || *line > '9') line++;
-    line[i - 3] = '\0';
-    i = atoi(line);
-    return i;
-}
-
-
-int getValue() { //Note: this value is in KB!
-    FILE *file = fopen("/proc/self/status", "r");
-    int result = -1;
-    char line[128];
-
-
-    while (fgets(line, 128, file) != NULL) {
-        if (strncmp(line, "VmSize:", 7) == 0) {
-            result = parseLine(line);
-            break;
-        }
-    }
-    fclose(file);
-    return result;
-}
+#include "BatchTester.h"
 
 /**
  * Arguments: <input-file-path> <query-type> <args>
@@ -52,12 +22,18 @@ int main(int argc, char *argv[]) {
         printf(" - <input-file-path> access <index>\n");
         printf(" - <input-file-path> rank <index> <character>\n");
         printf(" - <input-file-path> select <index> <character>\n");
+        printf(" - batchtest <input-file-path> <output-file> <num-of-runs>\n");
         printf(" - test\n");
         return 0;
     }
 
     if (strcmp(argv[1], "test") == 0) {
         testAll();
+    } else if (strcmp(argv[1], "batchtest") == 0) {
+        logln("-----------------------------");
+        logln("Batch time testing");
+        logln("-----------------------------");
+        batchTest(argv[2], argv[3], atoi(argv[4]));
     } else {
         char *file_name = argv[1];
         char *input;
@@ -75,7 +51,7 @@ int main(int argc, char *argv[]) {
         struct WaveletTree *tree = buildTree(input, input_len, used_alphabet, alphabet_len);
         timerStop();
 
-        printf("|Memory in use: %d MB\n", getValue()/ 1024);
+//        printf("|Memory in use: %d MB\n", getValue() / 1024);
 
         printf("|Execution time [tree building]: %f ms\n", timerGetTimeSpan());
 
@@ -110,7 +86,7 @@ int main(int argc, char *argv[]) {
 
         printf("|Execution time [%s]: %f ms\n", query, timerGetTimeSpan());
 
-        char *result_file_name = (char *) malloc(strlen(query + 1) * sizeof(char));
+        char *result_file_name = (char *) malloc((strlen(query) + 1) * sizeof(char));
         strcpy(result_file_name, query);
         strcat(result_file_name, "-res.txt");
 
