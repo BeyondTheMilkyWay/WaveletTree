@@ -426,6 +426,8 @@ class Node
 
 }
 
+ini_set("memory_limit","2000M");
+
 //get memory usage 
 $memUsageStart = memory_get_usage(false);
 //Main program
