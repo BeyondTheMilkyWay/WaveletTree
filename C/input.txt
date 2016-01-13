@@ -1,2 +1,0 @@
->simple_example http://alexbowe.com/wavelet-trees/
-Peter Piper picked a peck of pickled peppers

@@ -18,7 +18,7 @@ struct BitVector {
  * Allocates BitVector of size 'num_of_chars'.
  * Function will calculate optimal character number.
  */
-struct BitVector *allocateBitVector(size_t num_of_chars);
+struct BitVector *allocateBitVector(int num_of_chars);
 
 /**
  * Sets bit on position 'index' to given 'value'.
@@ -35,7 +35,7 @@ bool bitVecGetOnPosition(struct BitVector *bit_vector, int index);
 /**
  * Returns character array containing all characters encoded by given value.
  */
-char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, bool value);
+char *extractLettersByEncoding(struct BitVector *bit_vector, char *node_chars, bool value, int *length);
 
 /**
  * Deletes given 'bit_vector' and frees memory.
