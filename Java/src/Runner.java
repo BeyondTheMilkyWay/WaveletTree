@@ -48,7 +48,7 @@ public class Runner {
 		char letter = fileData.charAt(0); 
 		int accessIndex = fileData.length() / 2;
 		int rankIndex = fileData.length() / 2;
-		int selectIndex = (int) Math.floor(Math.sqrt(fileData.length()));
+		int selectIndex = (int) Math.floor(Math.sqrt(fileData.length() / 2));
 		int iter = 1000;
 		
 		////////// BUILD ///////////////
