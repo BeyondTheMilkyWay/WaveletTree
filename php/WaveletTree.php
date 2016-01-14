@@ -458,16 +458,16 @@ if (!isset($argv[1])) {
 
 
 //Main program
-$readStartTime   = round(microtime(true) * 1000);
+$readStartTime   = microtime(true);
 $inputString     = readFasFile($argv[1]);
-$readEndTime     = round(microtime(true) * 1000);
-$readTimeElapsed = ($readEndTime - $readStartTime);
+$readEndTime     = microtime(true);
+$readTimeElapsed = ($readEndTime - $readStartTime) * 1000;
 
 
-$buildStartTime   = round(microtime(true) * 1000);
+$buildStartTime   = microtime(true);
 $waveletTree = new WaveletTree($inputString);
-$buildEndTime     = round(microtime(true) * 1000);
-$buildTimeElapsed = ($buildEndTime - $buildStartTime);
+$buildEndTime     = microtime(true);
+$buildTimeElapsed = ($buildEndTime - $buildStartTime) * 1000;
 
 
 
