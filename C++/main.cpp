@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "tests.h"
+#include "FastaParser.h"
 
 using namespace std;
 
@@ -42,5 +43,24 @@ int main() {
   test_access(exampleStr8, 7);
   std::string exampleStr9(exampleArr);
   test_access(exampleStr9, 17);
+
+  // fasta
+  std::string filePath("/Users/dstankovic/Downloads/testCases/test_1k.fa");
+  FastaParser fastaParser;
+  std::string file_1k = fastaParser.parse(filePath);
+  cout << file_1k << endl;
+
+  std::string file_1k_1(file_1k);
+  test_build(file_1k_1);
+
+  std::string file_1k_2(file_1k);
+  test_rank(file_1k_2, 'G', 71);
+
+  std::string file_1k_3(file_1k);
+  test_select(file_1k_3, 'G', 5);
+
+  std::string file_1k_4(file_1k);
+  test_access(file_1k_4, 70);
+
   return 0;
 }
