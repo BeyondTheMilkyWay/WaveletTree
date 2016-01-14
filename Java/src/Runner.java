@@ -16,9 +16,15 @@ public class Runner {
 		
 		PrintWriter writer_read = null;
 		PrintWriter writer_build = null;
+		PrintWriter writer_access = null;
+		PrintWriter writer_rank = null;
+		PrintWriter writer_select = null;
 		try {
 			writer_read = new PrintWriter("read.out", "UTF-8");
 			writer_build = new PrintWriter("build.out", "UTF-8");
+			writer_access = new PrintWriter("access.out", "UTF-8");
+			writer_rank = new PrintWriter("rank.out", "UTF-8");
+			writer_select = new PrintWriter("select.out", "UTF-8");
 		} catch (FileNotFoundException e) {
 			System.out.println("Result filepath is not valid.");
 			System.exit(1);
@@ -29,21 +35,63 @@ public class Runner {
 
 		String filepath = args[0];
 
-		long readElapsedTime = System.currentTimeMillis();
+		/////////// PARSE //////////////
+		double readElapsedTime = System.nanoTime();
 		// parse FASTA file
 		String fileData = Parser.parseFASTA(filepath);
-		readElapsedTime = System.currentTimeMillis() - readElapsedTime;
+		readElapsedTime = (System.nanoTime() - readElapsedTime) / 1000000;
 		
-		writer_read.write(Long.toString(readElapsedTime));
+		writer_read.write(Double.toString(readElapsedTime));
 		writer_read.close();
 		
-		long buildElapsedTime = System.currentTimeMillis();
+		/////////// OPS PARAMS /////////
+		char letter = fileData.charAt(0); 
+		int accessIndex = fileData.length() / 2;
+		int rankIndex = fileData.length() / 2;
+		int selectIndex = (int) Math.floor(Math.sqrt(fileData.length()));
+		int iter = 1000;
+		
+		////////// BUILD ///////////////
+		double buildElapsedTime = System.nanoTime();
 		// build tree
 		WaveletTree wt = new WaveletTree(fileData.getBytes());
-		buildElapsedTime = System.currentTimeMillis() - buildElapsedTime;
+		buildElapsedTime = (System.nanoTime() - buildElapsedTime) / 1000000;
 		
-		writer_build.write(Long.toString(buildElapsedTime));
+		writer_build.write(Double.toString(buildElapsedTime));
 		writer_build.close();
+		
+		/////////// ACCESS ////////////
+		double accessTime = 0;
+		for (int i = 0; i < iter; i++) {
+			double accessElapsedTime = System.nanoTime();
+			wt.access(accessIndex);
+			accessElapsedTime = (System.nanoTime() - accessElapsedTime) / 1000000;
+			accessTime += accessElapsedTime;
+		}
+		writer_access.write(Double.toString(accessTime / iter));
+		writer_access.close();
+		
+		/////////// RANK ////////////
+		double rankTime = 0;
+		for (int i = 0; i < iter; i++) {
+			double rankElapsedTime = System.nanoTime();
+			wt.rank((byte)letter, rankIndex);
+			rankElapsedTime = (System.nanoTime() - rankElapsedTime) / 1000000;
+			rankTime += rankElapsedTime;
+		}
+		writer_rank.write(Double.toString(rankTime / iter));
+		writer_rank.close();
+		
+		/////////// SELECT ////////////
+		double selectTime = 0;
+		for (int i = 0; i < iter; i++) {
+			double selectElapsedTime = System.nanoTime();
+			wt.select((byte)letter, selectIndex);
+			selectElapsedTime = (System.nanoTime() - selectElapsedTime) / 1000000;
+			selectTime += selectElapsedTime;
+		}
+		writer_select.write(Double.toString(selectTime / iter));
+		writer_select.close();
 	}
 
 }
