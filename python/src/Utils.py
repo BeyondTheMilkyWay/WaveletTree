@@ -34,4 +34,4 @@ class Stopwatch():
         self.end_time = None
 
     def elapsed_ms(self):
-        return str((self.end_time - self.start_time) * 1000)
+        return (self.end_time - self.start_time) * 1000
