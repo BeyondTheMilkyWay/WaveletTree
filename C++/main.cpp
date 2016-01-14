@@ -92,7 +92,7 @@ void run(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 //  test();
-//  test_time(argc, argv);
-  run(argc, argv);
+  test_time(argc, argv);
+//  run(argc, argv);
   return 0;
 }
