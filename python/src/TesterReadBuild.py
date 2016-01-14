@@ -5,6 +5,16 @@ from WaveletTree import WaveletTree
 import Utils
 
 
+def report_2(read_stopwatch, build_stopwatch):
+    read_file = open('read.out', 'w')
+    read_file.write(read_stopwatch.elapsed_ms())
+    read_file.close()
+
+    build_file = open('build.out', 'w')
+    build_file.write(build_stopwatch.elapsed_ms())
+    build_file.close()
+
+
 def report(out_filepath, read_stopwatch, read_memory, build_stopwatch, build_memory):
     """ Write report to file """
 
@@ -24,8 +34,8 @@ def report(out_filepath, read_stopwatch, read_memory, build_stopwatch, build_mem
 """ Tester program that measures time and memory performance of reading data and building tree """
 if __name__ == '__main__':
 
-    if len(sys.argv) < 3:
-        print 'Missing arguments: <in_file> <out_file>'
+    if len(sys.argv) < 2:
+        print 'Missing arguments: <in_file>'
         exit(-1)
 
     # Reading data
@@ -47,4 +57,5 @@ if __name__ == '__main__':
     build_stopwatch.stop()
     build_memory_kB = Utils.get_max_memory_kB()
 
-    report(sys.argv[2], read_stopwatch, read_memory_kB, build_stopwatch, build_memory_kB)
+    # report(sys.argv[2], read_stopwatch, read_memory_kB, build_stopwatch, build_memory_kB)
+    report_2(read_stopwatch, build_stopwatch)
