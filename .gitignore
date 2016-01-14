@@ -1,5 +1,6 @@
 *.tar.gz
 testCases
+testReport
 
 
 # Created by https://www.gitignore.io/api/c,c++,python,pycharm,intellij,phpstorm,osx,windows,linux,java
