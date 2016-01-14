@@ -64,14 +64,18 @@ class WaveletTree:
         right_sub_alphabet = alphabet[half:]
 
         # Build bit vector for current node
-        bit_vector_buffer = StringIO.StringIO()
-        [bit_vector_buffer.write('0' if c in left_sub_alphabet else '1') for c in data]
-        node.add(bit_vector_buffer.getvalue())
-        bit_vector_buffer.close()
+        buffer = []
+        [buffer.append('0' if c in left_sub_alphabet else '1') for c in data]
+        node.add(''.join(buffer))
 
         # Split data for left and right node
-        left_sub_data = filter(lambda c: c in left_sub_alphabet, data)
-        right_sub_data = filter(lambda c: c in right_sub_alphabet, data)
+        left_sub_data = []
+        right_sub_data = []
+        for bit in data:
+            if bit in left_sub_alphabet:
+                left_sub_data.append(bit)
+            else:
+                right_sub_data.append(bit)
 
         # Create left && right node and build recursively
         node.left = WaveletNode(left_sub_alphabet, node)
@@ -90,7 +94,10 @@ class WaveletTree:
         child = node.left if is_left else node.right
         bit_type = '0' if is_left else '1'
 
-        new_position = reduce(lambda count, c: count+1 if c == bit_type else count, node.bit_vector[:position], 0)
+        new_position = 0
+        for bit in node.bit_vector[:position]:
+            if bit == bit_type:
+                new_position += 1
 
         return WaveletTree.__rank(child, new_position, character)
 
@@ -104,7 +111,10 @@ class WaveletTree:
         child = node.left if is_left else node.right
         bit_type = '0' if is_left else '1'
 
-        new_index = reduce(lambda count, c: count+1 if c == bit_type else count, node.bit_vector[:index], 0)
+        new_index = 0
+        for bit in node.bit_vector[:index]:
+            if bit == bit_type:
+                new_index += 1
 
         return WaveletTree.__access(child, new_index)
 
