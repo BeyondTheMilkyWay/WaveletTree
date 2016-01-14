@@ -16,7 +16,51 @@ bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
   return map[q];
 }
 
-WaveletNodeP build2(std::string &str, std::vector<char> &alphabet) {
+WaveletNodeP build_by_copy_sort(std::string &str, int l, int r, std::vector<char> &alphabet) {
+  if (alphabet.size() <= 1) {
+    return std::make_shared<WaveletNodeNull>(alphabet);
+  }
+  int size = r - l + 1;
+
+  // build bitstring, 0-string and 1-string
+  std::unique_ptr<std::string> str0(new std::string);
+  std::unique_ptr<std::string> str1(new std::string);
+  BitArray bitArray(size);
+  std::map<char, bool> map;
+  for (int i = 0; i < size; i++) {
+    char c = str[i + l];
+    bool cd = code(map, alphabet, c);
+    bitArray.set(i, cd);
+    if (cd) {
+      str1->push_back(c);
+    } else {
+      str0->push_back(c);
+    }
+  }
+
+  unsigned long str0size = str0->size();
+  for (unsigned long i = 0; i < str0size; i++) {
+    str[i + l] = (*str0)[i];
+  }
+  unsigned long str1size = str1->size();
+  for (unsigned long i = 0; i < str1size; i++) {
+    str[i + l + str0size] = (*str1)[i];
+  }
+  str0 = NULL;
+  str1 = NULL;
+
+  int mid = l + str0size;
+  std::vector<char> lAlphabet(alphabet.begin(), alphabet.begin() + alphabet.size() / 2);
+  WaveletNodeP left = build_by_copy_sort(str, l, mid - 1, lAlphabet);
+  std::vector<char> rAlphabet(alphabet.begin() + alphabet.size() / 2, alphabet.end());
+  WaveletNodeP right = build_by_copy_sort(str, mid, r, rAlphabet);
+  std::shared_ptr<WaveletNode> node = std::make_shared<WaveletNode>(bitArray, alphabet, left, right);
+  left->parent = node;
+  right->parent = node;
+  return node;
+}
+
+WaveletNodeP build_by_copy(std::string &str, std::vector<char> &alphabet) {
   if (alphabet.size() <= 1) {
     return std::make_shared<WaveletNodeNull>(alphabet);
   }
@@ -38,9 +82,9 @@ WaveletNodeP build2(std::string &str, std::vector<char> &alphabet) {
   }
 
   std::vector<char> lAlphabet(alphabet.begin(), alphabet.begin() + alphabet.size() / 2);
-  WaveletNodeP left = build2(str0, lAlphabet);
+  WaveletNodeP left = build_by_copy(str0, lAlphabet);
   std::vector<char> rAlphabet(alphabet.begin() + alphabet.size() / 2, alphabet.end());
-  WaveletNodeP right = build2(str1, rAlphabet);
+  WaveletNodeP right = build_by_copy(str1, rAlphabet);
   std::shared_ptr<WaveletNode> node = std::make_shared<WaveletNode>(bitArray, alphabet, left, right);
   left->parent = node;
   right->parent = node;
@@ -70,7 +114,8 @@ void WaveletTree::build(std::string &str) {
   std::sort(alphabet.begin(), alphabet.end());
 
   // build tree
-  this->root = build2(str, alphabet);
+  this->root = build_by_copy(str, alphabet);
+//  this->root = build_by_sort(str, 0, str.size()-1, alphabet);
   this->root->setRoot(true);
 }
 
