@@ -512,11 +512,13 @@ if($argv[2] == "query") {
     }
 
     $readEndTime     = microtime(true);
-    $readTimeElapsed = ($readEndTime - $readStartTime);
+    $readTimeElapsed = ($readEndTime - $readStartTime) * 1000;
 
     fprintf($output,"%.16f", $readTimeElapsed);
     fflush($output);
     fclose($output);
+
+    print "finished rank\n";
 
     $output = fopen('access.out', 'w+');
     $readStartTime   = microtime(true);
@@ -526,25 +528,30 @@ if($argv[2] == "query") {
     }
 
     $readEndTime     = microtime(true);
-    $readTimeElapsed = ($readEndTime - $readStartTime);
+    $readTimeElapsed = ($readEndTime - $readStartTime) * 1000;
 
     fprintf($output,"%.16f", $readTimeElapsed);
     fflush($output);
     fclose($output);
 
+    print "finished access\n";
+
+
     $output = fopen('select.out', 'w+');
     $readStartTime   = microtime(true);
 
-    for($i = 0; $i < 1000; $i++) {
+    for($i = 0; $i < 10; $i++) {
         $waveletTree->select($selectIndex,$testLetter );
     }
 
     $readEndTime     = microtime(true);
-    $readTimeElapsed = ($readEndTime - $readStartTime);
+    $readTimeElapsed = ($readEndTime - $readStartTime) * 10;
 
     fprintf($output,"%.16f", $readTimeElapsed );
     fflush($output);
     fclose($output);
+    print "finished select\n";
+
     return;
 }
 
