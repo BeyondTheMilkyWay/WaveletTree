@@ -28,3 +28,15 @@ int WaveletNode::binary_select(bool q, int x) {
   }
   return index - 1;
 }
+
+unsigned long WaveletNode::__sizeof() {
+  unsigned long alphabetSize = alphabet.capacity() * sizeof(char);
+  unsigned long bitarraySize = bitArray.__sizeof();
+  unsigned long lSize = 0;
+  unsigned long rSize = 0;
+  if (!this->isNull()) {
+    lSize = this->left->__sizeof();
+    rSize = this->right->__sizeof();
+  }
+  return alphabetSize + bitarraySize + lSize + rSize + sizeof(this);
+}

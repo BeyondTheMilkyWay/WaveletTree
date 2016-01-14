@@ -24,3 +24,7 @@ std::string BitArray::toString() {
 int BitArray::size() {
   return arr.size();
 }
+
+unsigned long BitArray::__sizeof() {
+  return arr.capacity() * sizeof(char);
+}

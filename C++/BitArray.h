@@ -25,6 +25,8 @@ public:
     int size();
 
     std::string toString();
+
+    unsigned long __sizeof();
 };
 
 

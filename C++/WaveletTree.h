@@ -23,6 +23,8 @@ public:
       return root;
     }
 
+    unsigned long __sizeof();
+
 private:
     WaveletNodeP root;
     void build(std::string &str);

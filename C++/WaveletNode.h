@@ -45,6 +45,8 @@ public:
       WaveletNode::_root = root;
     }
 
+    unsigned long __sizeof();
+
 private:
     bool _root = false;
 };

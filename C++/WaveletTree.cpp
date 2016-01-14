@@ -166,3 +166,7 @@ char WaveletTree::access(int x) {
   }
   return node->alphabet[0];
 }
+
+unsigned long WaveletTree::__sizeof() {
+  return sizeof(this) + root->__sizeof();
+}
