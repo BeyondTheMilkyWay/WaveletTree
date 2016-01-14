@@ -426,39 +426,52 @@ class Node
 
 }
 
+function readFasFile($name) {
+    $file        = fopen($name, 'r');
+    $inputString = '';
+    while (($line = fgets($file)) !== false) {
+        $line = trim($line);
+        if (strrpos($line, '>') === 0) {
+            continue;
+        }
+
+        $inputString .= $line;
+    }
+    fclose($file);
+    return $inputString;
+}
+
 ini_set("memory_limit","2000M");
 
 //get memory usage 
 $memUsageStart = memory_get_usage(false);
-//Main program
-$startTime = round(microtime(true) * 1000);
+
 
 if (!isset($argv[1])) {
     print "Usage: php WaveletTree.php input.fas output operation params\n";
     print "access num\n";
     print "rank index letter \n";
     print "select occurrenceNumber letter \n";
+    print "test \n";
     return;
 }
-$file        = fopen($argv[1], 'r');
-$inputString = '';
-while (($line = fgets($file)) !== false) {
-    $line = trim($line);
-    if (strrpos($line, '>') === 0) {
-        continue;
-    }
-
-    $inputString .= $line;
-}
-fclose($file);
 
 
+//Main program
+$readStartTime   = round(microtime(true) * 1000);
+$inputString     = readFasFile($argv[1]);
+$readEndTime     = round(microtime(true) * 1000);
+$readTimeElapsed = ($readEndTime - $readStartTime);
+
+
+$buildStartTime   = round(microtime(true) * 1000);
 $waveletTree = new WaveletTree($inputString);
-$endTime     = round(microtime(true) * 1000);
-$timeElapsed = ($endTime - $startTime);
+$buildEndTime     = round(microtime(true) * 1000);
+$buildTimeElapsed = ($buildEndTime - $buildStartTime);
 
 
-print 'Time elapsed: ' . ($timeElapsed) . " ms\n"; //MS
+
+print 'Time elapsed: ' . ($readTimeElapsed + $buildTimeElapsed) . " ms\n"; //MS
 $root             = $waveletTree->getRoot();
 $memUsageEnd      = memory_get_usage(false);
 $totalMemoryUsage = $memUsageEnd - $memUsageStart;
@@ -471,15 +484,29 @@ if ($totalMemoryUsage < 1024) {
     print round($totalMemoryUsage / 1048576, 2) . " MB\n";
 }
 
+
+if($argv[2] == "test") {
+
+    $readOut  = fopen('read.out', 'w+');
+    $buildOut = fopen('build.out', 'w+');
+    fwrite($readOut, $readTimeElapsed);
+    fwrite($buildOut, $buildTimeElapsed);
+    fflush($readOut);
+    fflush($buildOut);
+    fclose($readOut);
+    fclose($buildOut);
+    return;
+}
+
 $operation = $argv[3];
 
 if($operation == "access") {
     $result = $waveletTree->access($argv[4]);
-}elseif($operation == "rank") {
+} elseif($operation == "rank") {
     $result = $waveletTree->rank($argv[4], $argv[5]);
-}elseif($operation == "select") {
+} elseif($operation == "select") {
     $result = $waveletTree->select($argv[4]-1, $argv[5]);
-}else {
+} else {
     print "Invalid operation";
     return;
 }
