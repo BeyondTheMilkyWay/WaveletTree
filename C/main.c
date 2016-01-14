@@ -23,12 +23,19 @@ int main(int argc, char *argv[]) {
         printf(" - <input-file-path> rank <index> <character>\n");
         printf(" - <input-file-path> select <index> <character>\n");
         printf(" - batchtest <input-file-path> <output-file> <num-of-runs>\n");
+        printf(" - generate-tests <input-file-path>");
         printf(" - test\n");
         return 0;
     }
 
     if (strcmp(argv[1], "test") == 0) {
         testAll();
+    } else if (strcmp(argv[1], "generate-tests") == 0) {
+        logln("-----------------------------");
+        logln("Generating tests");
+        logln("-----------------------------");
+        generateReadTest(argv[2], "read.out");
+        generateBuildTest(argv[2], "build.out");
     } else if (strcmp(argv[1], "batchtest") == 0) {
         logln("-----------------------------");
         logln("Batch time testing");

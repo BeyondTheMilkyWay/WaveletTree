@@ -15,4 +15,14 @@
  */
 void batchTest(char *file_name, char *out_file_name, int num_of_runs);
 
+/**
+ * Generates read test file
+ */
+void generateReadTest(char * input_file, char *output_file);
+
+/**
+ * Generates build test file
+ */
+void generateBuildTest(char * input_file, char * output_file);
+
 #endif //C_BATCHTESTER_H

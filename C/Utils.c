@@ -111,10 +111,7 @@ char *extractAlphabetLetters(char *input_chars) {
     return alphabet;
 }
 
-/**
- * Gets the used alphabet in ascending order from given file
- */
-void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, int *input_len, int *alphabet_len) {
+char *readInput(const char *file_name, long int *total_size) {
     FILE *file = fopen(file_name, "r");
     if (file == NULL) {
         error("Error while opening file.");
@@ -122,15 +119,26 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, i
 
     // calculate total file size
     fseek(file, 0L, SEEK_END);
-    long int total_size = ftell(file);
+    *total_size = ftell(file);
     fseek(file, 0L, SEEK_SET);
 
-    char *all_lines = (char *) malloc((total_size + 1) * sizeof(char));
-    fread(all_lines, (size_t) total_size, 1, file);
-    all_lines[total_size] = '\0';
+    char *all_lines = (char *) malloc((*total_size + 1) * sizeof(char));
+    fread(all_lines, (size_t) *total_size, 1, file);
+    all_lines[*total_size] = '\0';
 
+    return all_lines;
+}
+
+
+/**
+ * Gets the used alphabet in ascending order from given file
+ */
+void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, int *input_len, int *alphabet_len) {
     int num_of_nl = 0;
     int first_nl_index = 0;
+
+    long int total_size;
+    char * all_lines = readInput(file_name, &total_size);
 
     //remove first line if starts with '>'
     if (startsWith(">", all_lines)) {
@@ -178,7 +186,6 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, i
     *input_len = new_size + 1;
 
     free((void *) all_lines);
-    fclose(file);
 
     int alphabet_size = 0;
     for (int i = 0; i < 256; ++i) {
