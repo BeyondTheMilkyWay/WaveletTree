@@ -40,3 +40,42 @@ void batchTest(char *file_name, char *out_file_name, int num_of_runs) {
 
     fclose(file);
 }
+
+void generateReadTest(char *input_file, char *output_file) {
+    timerStart();
+
+    long int total_size;
+    char *all_lines = readInput(input_file, &total_size);
+    free((void *) all_lines);
+
+    timerStop();
+
+    FILE *file = fopen(output_file, "w");
+
+    double time_span = timerGetTimeSpan();
+
+    fprintf(file, "%f", time_span);
+    fclose(file);
+}
+
+void generateBuildTest(char * input_file, char * output_file) {
+    int input_len;
+    int alphabet_len;
+    char *input;
+    char *used_alphabet;
+
+    getAlphabetFromFile(input_file, &used_alphabet, &input, &input_len, &alphabet_len);
+
+    timerStart();
+    struct WaveletTree *tree = buildTree(input, input_len, used_alphabet, alphabet_len);
+    timerStop();
+
+    FILE *file = fopen(output_file, "w");
+
+    double time_span = timerGetTimeSpan();
+    fprintf(file, "%f", time_span);
+    fclose(file);
+
+    deleteTree(tree);
+}
+

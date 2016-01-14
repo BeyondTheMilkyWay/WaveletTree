@@ -47,6 +47,10 @@ void getAlphabetFromFile(const char *file_name, char **alphabet, char **input, i
  */
 void logln(char *msg);
 
+/**
+ * Reads input file (without further processing).
+ */
+char *readInput(const char *file_name, long int *total_size);
 
 /**
  * These two functions are used for retrieving
