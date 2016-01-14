@@ -7,8 +7,14 @@
 
 #include <iostream>
 
+/**
+ * Parser for files in FASTA format.
+ */
 class FastaParser {
 public:
+    /**
+     * Parses FASTA file. First line (with '>') is ignored.
+     */
     std::string parse(std::string &filePath);
 };
 

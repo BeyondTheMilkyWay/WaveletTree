@@ -8,6 +8,10 @@
 
 #include "WaveletNode.h"
 
+/**
+ * Node of a Wavelet tree that represents null (terminal) node.
+ * It has only 1 character in alphabet.
+ */
 class WaveletNodeNull : public WaveletNode {
 
 public:

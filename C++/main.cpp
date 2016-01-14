@@ -8,6 +8,7 @@
 
 using namespace std;
 
+// Function for measuring time performance.
 void test_time(int argc, char* argv[]) {
   std::string inFile(argv[1]);
   std::string parseDurationFile("./read.out");
@@ -39,6 +40,10 @@ void test_time(int argc, char* argv[]) {
   memory_ostream.close();
 }
 
+/** Function that runs program with given arguments.
+ * Arguments:
+ * <program_name> <input_file> <output_file> <task> <task_arguments...>
+ */
 void run(int argc, char* argv[]) {
   if (argc < 4) {
     cout << "Invalid arguments" << endl;
@@ -101,6 +106,7 @@ void run(int argc, char* argv[]) {
   ostream.close();
 }
 
+// Function for testing and profiling rank, access and select methods.
 void test_query(int argc, char* argv[]) {
   std::string inFile(argv[1]);
   std::string rankFile("./rank.out");
@@ -152,6 +158,7 @@ void test_query(int argc, char* argv[]) {
   access_ostream.close();
 }
 
+// Entry point of the program.
 int main(int argc, char* argv[]) {
 //  test();
 //  test_time(argc, argv);

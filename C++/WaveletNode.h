@@ -11,6 +11,10 @@
 #include "BitArray.h"
 #include "NullableObject.h"
 
+/**
+ * Node of a Wavelet tree.
+ * Contains bit array, alphabet, parent node, left and right node.
+ */
 class WaveletNode : public NullableObject {
 public:
     BitArray bitArray;
@@ -33,6 +37,7 @@ public:
       return pos >= size / 2;
     }
 
+    // Decides if given char should be encoded as 0 or 1.
     bool bitcode(char q) {
       return WaveletNode::bitcode(this->alphabet, q);
     }

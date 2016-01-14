@@ -8,12 +8,14 @@
 
 using namespace std;
 
+// prints elements of a vector
 void print1(vector<char> &v) {
   for (char c : v) {
     cout << c;
   }
 }
 
+// recursively prints tree
 void printTree(WaveletNode &node, int d) {
   if (node.isNull()) return;
   cout << d << ":" << endl << "alphabet ";
@@ -57,6 +59,7 @@ void test_access(std::string &str, int x) {
   test_access(tree, x);
 }
 
+// tests file on a given path
 void test_file(std::string &filePath) {
   cout << filePath << endl;
   FastaParser fastaParser;
@@ -96,6 +99,7 @@ void test_file(std::string &filePath) {
   cout << "Total duration: " << total_duration << endl << endl;
 }
 
+// general tests
 void test() {
   // rank
   const char *longArr = "Peter Piper picked a peck of pickled peppers";

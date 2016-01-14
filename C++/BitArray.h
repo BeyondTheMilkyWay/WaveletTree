@@ -9,11 +9,16 @@
 #include <vector>
 #include <string>
 
+/**
+ * Class representing array of bits even though underlying implementation
+ * uses vector of chars.
+ */
 class BitArray {
 private:
     std::vector<char> arr;
 public:
 
+    // Size of bit array
     BitArray(int size) {
       for (int i = 0; i < size; i++) {
         arr.push_back(0);

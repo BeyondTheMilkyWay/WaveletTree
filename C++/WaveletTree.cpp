@@ -8,6 +8,7 @@
 #include "WaveletTree.h"
 #include "WaveletNodeNull.h"
 
+// Same as WaveletNode::bitcode but with caching. Given map is used for caching.
 bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
   if (map.find(q) == map.end()) {
     // key doesn't exist
@@ -16,6 +17,10 @@ bool code(std::map<char, bool> &map, std::vector<char> &alphabet, char q) {
   return map[q];
 }
 
+/**
+ * way of building a tree by making two new strings with 0s and 1s, copying them back to original string
+ * and forwarding the orignial string to children nodes
+ */
 WaveletNodeP build_by_copy_sort(std::string &str, int l, int r, std::vector<char> &alphabet) {
   if (alphabet.size() <= 1) {
     return std::make_shared<WaveletNodeNull>(alphabet);
@@ -60,6 +65,7 @@ WaveletNodeP build_by_copy_sort(std::string &str, int l, int r, std::vector<char
   return node;
 }
 
+// way of building a tree by making two new strings and forwarding those to children nodes
 WaveletNodeP build_by_copy(std::string &str, std::vector<char> &alphabet) {
   if (alphabet.size() <= 1) {
     return std::make_shared<WaveletNodeNull>(alphabet);
@@ -91,6 +97,7 @@ WaveletNodeP build_by_copy(std::string &str, std::vector<char> &alphabet) {
   return node;
 }
 
+// Converts spaces to underscores and appends $ to the end.
 void convertString(std::string &str) {
   for (int i = str.size() - 1; i >= 0; i--) {
     if (str[i] == ' ') {
