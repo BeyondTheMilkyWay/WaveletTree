@@ -7,6 +7,30 @@
 
 using namespace std;
 
+void test_time(int argc, char* argv[]) {
+  std::string inFile(argv[1]);
+  std::string parseDurationFile("./read.out");
+  std::string buildDurationFile("./build.out");
+  FastaParser fastaParser;
+  std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+  std::string str = fastaParser.parse(inFile);
+  std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+  WaveletTree tree(str);
+  std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
+
+  ofstream parse_ostream;
+  parse_ostream.open(parseDurationFile);
+  auto parse_duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() / 1000;
+  parse_ostream << parse_duration << endl;
+  parse_ostream.close();
+
+  ofstream build_ostream;
+  build_ostream.open(buildDurationFile);
+  auto build_duration = std::chrono::duration_cast<std::chrono::microseconds>(t3 - t2).count() / 1000;
+  build_ostream << build_duration << endl;
+  build_ostream.close();
+}
+
 void run(int argc, char* argv[]) {
   if (argc < 4) {
     cout << "Invalid arguments" << endl;
@@ -68,6 +92,7 @@ void run(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 //  test();
+//  test_time(argc, argv);
   run(argc, argv);
   return 0;
 }
