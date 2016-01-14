@@ -21,8 +21,7 @@ class FASTA:
                 self.sequence_name = line.split()[0][1:]        # skip '<'
             else:
                 for c in line:
-                    # TODO remove '_'
-                    if c.isalpha() or c in ['_', '$']:
+                    if c.isalpha():
                         self.data.append(c)
 
         file.close()
