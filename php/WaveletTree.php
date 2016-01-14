@@ -487,14 +487,64 @@ if ($totalMemoryUsage < 1024) {
 
 if($argv[2] == "test") {
 
-    $readOut  = fopen('read.out', 'w+');
+    $output   = fopen('read.out', 'w+');
     $buildOut = fopen('build.out', 'w+');
-    fwrite($readOut, $readTimeElapsed);
+    fwrite($output, $readTimeElapsed);
     fwrite($buildOut, $buildTimeElapsed);
-    fflush($readOut);
+    fflush($output);
     fflush($buildOut);
-    fclose($readOut);
+    fclose($output);
     fclose($buildOut);
+    return;
+}
+
+if($argv[2] == "query") {
+    $testLetter = $inputString[0];
+    $rankIndex = count($inputString) / 2;
+    $selectIndex = sqrt(count($inputString) / 2);
+
+    $output = fopen('rank.out', 'w+');
+
+    $readStartTime   = round(microtime(true) * 1000);
+
+    for($i = 0; $i < 1000; $i++) {
+        $waveletTree->rank($rankIndex, $testLetter);
+    }
+
+    $readEndTime     = round(microtime(true) * 1000);
+    $readTimeElapsed = ($readEndTime - $readStartTime);
+
+    fwrite($output, $readTimeElapsed/1000);
+    fflush($output);
+    fclose($output);
+
+    $output = fopen('rank.out', 'w+');
+    $readStartTime   = round(microtime(true) * 1000);
+
+    for($i = 0; $i < 1000; $i++) {
+        $waveletTree->access($rankIndex);
+    }
+
+    $readEndTime     = round(microtime(true) * 1000);
+    $readTimeElapsed = ($readEndTime - $readStartTime);
+
+    fwrite($output, $readTimeElapsed/1000);
+    fflush($output);
+    fclose($output);
+
+    $output = fopen('index.out', 'w+');
+    $readStartTime   = round(microtime(true) * 1000);
+
+    for($i = 0; $i < 1000; $i++) {
+        $waveletTree->select($selectIndex,$testLetter );
+    }
+
+    $readEndTime     = round(microtime(true) * 1000);
+    $readTimeElapsed = ($readEndTime - $readStartTime);
+
+    fwrite($output, $readTimeElapsed/1000);
+    fflush($output);
+    fclose($output);
     return;
 }
 
