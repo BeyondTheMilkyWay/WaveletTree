@@ -50,15 +50,15 @@ public class RunRank {
 		// parse FASTA file
 		String fileData = Parser.parseFASTA(filepath);
 		
-		long buildElapsedTime = System.currentTimeMillis();
+		double buildElapsedTime = System.nanoTime();
 		// build tree
 		WaveletTree wt = new WaveletTree(fileData.getBytes());
-		buildElapsedTime = System.currentTimeMillis() - buildElapsedTime;
+		buildElapsedTime = (System.nanoTime() - buildElapsedTime) / 1000000;
 		
-		long rankElapsedTime = System.currentTimeMillis();
+		double rankElapsedTime = System.nanoTime();
 		//calculate rank
 		int rank = wt.rank(character, index);
-		rankElapsedTime = System.currentTimeMillis() - rankElapsedTime;
+		rankElapsedTime = (System.nanoTime() - rankElapsedTime) / 1000000;
 
 		StringBuilder builder = new StringBuilder();
 		builder.append("Rank result: ");

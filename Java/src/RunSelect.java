@@ -48,15 +48,15 @@ public class RunSelect {
 		//parse FASTA file
 		String fileData = Parser.parseFASTA(filepath);
 		
-		long buildElapsedTime = System.currentTimeMillis();
+		double buildElapsedTime = System.nanoTime();
 		// build tree
 		WaveletTree wt = new WaveletTree(fileData.getBytes());
-		buildElapsedTime = System.currentTimeMillis() - buildElapsedTime;
+		buildElapsedTime = (System.nanoTime() - buildElapsedTime) / 1000000;
 		
-		long selectElapsedTime = System.currentTimeMillis();
+		double selectElapsedTime = System.nanoTime();
 		//calculate select
 		int select = wt.select(character, index);
-		selectElapsedTime = System.currentTimeMillis() - selectElapsedTime;
+		selectElapsedTime = (System.nanoTime() - selectElapsedTime) / 1000000;
 
 		
 		StringBuilder builder = new StringBuilder();

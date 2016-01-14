@@ -44,15 +44,15 @@ public class RunAccess {
 		
 		
 
-		long buildElapsedTime = System.currentTimeMillis();
+		double buildElapsedTime = System.nanoTime();
 		// build tree
 		WaveletTree wt = new WaveletTree(fileData.getBytes());
-		buildElapsedTime = System.currentTimeMillis() - buildElapsedTime;
+		buildElapsedTime = (System.nanoTime() - buildElapsedTime) / 1000000;
 		
-		long accessElapsedTime = System.currentTimeMillis();
+		double accessElapsedTime = System.nanoTime();
 		//get letter on index
 		char letter = (char) wt.access(index);
-		accessElapsedTime = System.currentTimeMillis() - accessElapsedTime;
+		accessElapsedTime = (System.nanoTime() - accessElapsedTime) / 1000000;
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("Access result: ");
