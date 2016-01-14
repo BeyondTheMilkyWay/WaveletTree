@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LANGUAGE=python
+LANGUAGE=Java
 
 TEST_REPORT_DIR=testReport/$LANGUAGE
 rm -rd $TEST_REPORT_DIR
@@ -21,7 +21,7 @@ for test_case in $(ls testCases/); do
     echo $test_case: $COUNTER
 
     # Call of program
-    python python/src/TesterReadBuild.py  testCases/$test_case &&
+    java Runner testCases/$test_case &&
 
     cat read.out >> $READ_OUT &&
     echo >> $READ_OUT &&

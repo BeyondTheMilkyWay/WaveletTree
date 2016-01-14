@@ -13,7 +13,6 @@
 void generateFunctionTest(char *input_file) {
     char *input;
     char *used_alphabet;
-
     int input_len;
     int alphabet_len;
 
@@ -22,6 +21,8 @@ void generateFunctionTest(char *input_file) {
 
     input_len--;
     char letter = input[0];
+    printf("%c", letter);
+
     int access_index = input_len / 2;
     int rank_index = input_len / 2;
     int select_index = (int) sqrt(input_len / 2);
@@ -52,7 +53,6 @@ void generateFunctionTest(char *input_file) {
     FILE *rank_file = fopen("rank.out", "w");
     fprintf(rank_file, "%f", rank_time / 1000.0);
     fclose(rank_file);
-
 
     // select tests
     double select_time = 0;
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
         struct WaveletTree *tree = buildTree(input, input_len, used_alphabet, alphabet_len);
         timerStop();
 
-//        printf("|Memory in use: %d MB\n", getValue() / 1024);
+        printf("|Memory in use: %d KB\n", getValue());
 
         printf("|Execution time [tree building]: %f ms\n", timerGetTimeSpan());
 
